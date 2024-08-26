@@ -1,16 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 头部导航条 -->
-		<view class="header-wrap">
-			<view class="header">
-				<view class="logo">
-					<h1><a class="alogo" href="#">关于我们</a></h1>
-				</view>
-				<view class="word">
-					<span class="wenan">喜欢这个世界，更喜欢你</span>
-				</view>
-			</view>
-		</view>
+	    <Header />
 		<view class="content-wrap">
 			<view class="bg-wrap">
 				<image src="/static/images/bg.png" mode="aspectFit" style="width: 100%; "></image>
@@ -55,18 +46,13 @@
 			</view>
 		
 		</view>
-		<view class="foot-wrap">
-			<u-tabbar :value="value1" @change="change1" :fixed="false" :placeholder="false"
-				:safeAreaInsetBottom="false">
-				<u-tabbar-item text="首页" icon="home" @click="click1"></u-tabbar-item>
-				<u-tabbar-item text="消息" icon="play-right" @click="click1"></u-tabbar-item>
-				<u-tabbar-item text="我的" icon="account" @click="click1"></u-tabbar-item>
-			</u-tabbar>
-		</view>
+
 	</view>
 </template>
 
 <script>
+	import Header from '@/components/header/Header.vue';
+
 	/**
 	 * 获取任意时间
 	 */
@@ -93,7 +79,7 @@
 		}
 	}
 	export default {
-		components: {},
+		components: {Header},
 		data() {
 			return {
 				list1: [
@@ -102,7 +88,7 @@
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
 				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
-				value1: 0,
+	
 				showCalendar: false,
 				info: {
 					lunar: true,
@@ -141,12 +127,7 @@
 			}, 2000)
 		},
 		methods: {
-			click1(e) {
-				console.log('click1', e);
-			},
-			change1(e) {
-				console.log('click1', e);
-			},
+	
 			open() {
 				this.$refs.calendar.open()
 			},
@@ -173,43 +154,7 @@
 </script>
 
 <style>
-	/* 头部css */
-	.header-wrap {
-		width: 100%;
-		height: 4.5rem;
-		display: flex;
-		align-items: center;
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 1;
-		backdrop-filter: blur(15px);
-		-webkit-backdrop-filter: blur(15px);
-		background: #ffffff1f;
-		color: #707070;
-	}
-
-	.header-wrap .header {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-		flex-wrap: nowrap;
-	}
-
-	.header-wrap .header .logo h1 {
-		font-size: 1.5rem;
-		font-family: 'Noto Serif SC', serif;
-		font-weight: 700;
-	}
-
-	.header-wrap .header .word {
-		font-family: 'Noto Serif SC', serif;
-		font-weight: 400;
-		font-size: 1.1rem;
-		width: 60%;
-		text-align: right;
-	}
+	
 
 	.bg-wrap {
 		width: 100%;
