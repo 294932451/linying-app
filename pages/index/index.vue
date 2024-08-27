@@ -1,55 +1,54 @@
 <template>
 	<view class="container">
 		<!-- 头部导航条 -->
-	    <Header />
+		<Header />
 		<view class="content-wrap">
 			<view class="bg-wrap">
-				<image src="/static/images/bg.png" mode="aspectFit" style="width: 100%; "></image>
+				<image src="/static/images/bg.png" mode="aspectFit" class="background-image"></image>
 			</view>
 			<view class="content-text">
-				<uni-title type="h2" title="我们在一起已经" align="center"></uni-title>
+				<uni-title type="h2" title="我们在一起已经" align="center"  style="color: #fff;"></uni-title>
 			</view>
 			<view class="content-time">
-				<uni-countdown :day="1" :hour="1" :minute="12" :second="40" />
+				<p class="time-text">{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟 {{ seconds }} 秒</p>
 			</view>
 		</view>
-		<u-divider text="" ></u-divider>
+		<u-divider text=""></u-divider>
 		<view class="content-notice">
-			<u-notice-bar :text="text1"></u-notice-bar>
+			<u-notice-bar :text="text1" class="notice-bar" :speed="30"  :fontSize="30"></u-notice-bar>
 		</view>
 		<view class="content-calendar">
 			<!-- 插入模式 -->
 			<uni-calendar class="uni-calendar--hook" :selected="info.selected" :showMonth="false" @change="change"
 				@monthSwitch="monthSwitch" />
 		</view>
-		
+
 		<view class="content-card">
 			<view class="card">
-				<uni-card :is-shadow="false" is-full >
+				<uni-card :is-shadow="false" is-full>
 					<text class="uni-h6">点点滴滴</text>
 				</uni-card>
 			</view>
 			<view class="card">
-				<uni-card :is-shadow="false" is-full >
+				<uni-card :is-shadow="false" is-full>
 					<text class="uni-h6">关于我们</text>
 				</uni-card>
 			</view>
 			<view class="card">
-				<uni-card :is-shadow="false" is-full >
+				<uni-card :is-shadow="false" is-full>
 					<text class="uni-h6">相册</text>
 				</uni-card>
 			</view>
 			<view class="card">
-				<uni-card :is-shadow="false" is-full >
+				<uni-card :is-shadow="false" is-full>
 					<text class="uni-h6">纪念</text>
 				</uni-card>
 			</view>
-		
+
 		</view>
 
 	</view>
 </template>
-
 <script>
 	import Header from '@/components/header/Header.vue';
 
@@ -79,7 +78,9 @@
 		}
 	}
 	export default {
-		components: {Header},
+		components: {
+			Header
+		},
 		data() {
 			return {
 				list1: [
@@ -88,7 +89,7 @@
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
 				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
-	
+
 				showCalendar: false,
 				info: {
 					lunar: true,
@@ -96,7 +97,27 @@
 					insert: false,
 					selected: []
 				},
+				startTime: new Date('2024-06-14T00:00:00').getTime(), // 开始计时的时间，可以修改为你需要的时间
+				currentTime: 0,
+				timer: null,
 			}
+		},
+		computed: {
+			days() {
+				return Math.floor(this.currentTime / (1000 * 60 * 60 * 24));
+			},
+			hours() {
+				return Math.floor((this.currentTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			},
+			minutes() {
+				return Math.floor((this.currentTime % (1000 * 60 * 60)) / (1000 * 60));
+			},
+			seconds() {
+				return Math.floor((this.currentTime % (1000 * 60)) / 1000);
+			},
+		},
+		onLoad() {
+		
 		},
 		onReady() {
 			this.$nextTick(() => {
@@ -126,8 +147,14 @@
 				]
 			}, 2000)
 		},
+		mounted() {
+			this.updateTimer();
+			this.timer = setInterval(this.updateTimer, 1000);
+		},
+		beforeDestroy() {
+			clearInterval(this.timer);
+		},
 		methods: {
-	
 			open() {
 				this.$refs.calendar.open()
 			},
@@ -148,49 +175,116 @@
 			},
 			monthSwitch(e) {
 				console.log('monthSwitchs 返回:', e)
-			}
+			},
+			updateTimer() {
+				const now = new Date().getTime();
+				this.currentTime = now - this.startTime;
+			},
 		}
 	}
 </script>
 
-<style>
-	
+<style scoped>
+/* 背景图片 */
+.bg-wrap {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+	margin-bottom: 20px;
 
-	.bg-wrap {
-		width: 100%;
-	}
+	background-size: cover;
+}
 
-	.content-time {
-		display: flex;
-		justify-content: center;
-	}
+.background-image {
+	width: 100%;
+	border-radius: 10px;
+}
 
-	.content-card {
-		height: 350px;
-		margin-top: 20px;
-		text-align: center;
-		
-	}
+/* 时间显示部分 */
+.content-time {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+}
 
-	.content-card .card {
-		margin-top: 30px;
-	}
+.time-text {
+	font-size: 22px;
+	font-weight: bold;
+	color: #fff;
+	background-color: rgba(0, 0, 0, 0.6);
+	padding: 15px 25px;
+	border-radius: 12px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* 发光效果 */
+}
 
-	.foot-wrap {
-		position: fixed;
-		bottom: 0;
-		width: 100%;
-	}
-	.content-notice {
-		margin: 10px 10px 0 0;
-	}
+/* 通知栏 */
+.content-notice {
+	margin: 15px 10px;
+}
 
-	.calendar-button {
-		flex: 1;
-		font-weight: bold;
-		font-size: 32rpx;
-	}
-	.content-calendar {
-		margin-top: 15px;
-	}
+.notice-bar {
+	background-color: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	border-radius: 8px;
+	padding: 5px 10px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 日历部分 */
+.content-calendar {
+	margin-top: 20px;
+	padding: 0 10px;
+}
+
+.uni-calendar--hook {
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0.9);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+	padding: 10px;
+}
+
+/* 卡片部分 */
+.content-card {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin-top: 20px;
+	padding: 0 10px;
+}
+
+.content-card .card {
+	flex: 1;
+	min-width: 48%;
+	margin-bottom: 20px;
+}
+
+.uni-card {
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	padding: 15px;
+	text-shadow: 0 0 3px rgba(255, 255, 255, 0.3); /* 轻微发光效果 */
+}
+
+.uni-h6 {
+	font-size: 18px;
+	font-weight: 500;
+	color: #fff;
+}
+
+/* 通用样式 */
+.container {
+   padding: 20px 0;
+      background: url('/static/images/pink-bg.png') no-repeat center center; /* 替换为你的星空背景图 */
+      background-size: cover;
+      min-height: 100vh;
+      color: #fff;
+	  padding-top: 70px; /* 增加顶部内边距，确保内容不被头部遮挡 */
+}
+
 </style>

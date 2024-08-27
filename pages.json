@@ -34,12 +34,12 @@
 				"iconPath": "static/images/tabbar/tong.jpg"
 				// "selectedIconPath": "static/tabbar/home-active.png"
 			},
-			{
-				"pagePath": "pages/message/index",
-				"text": "消息",
-				"iconPath": "static/images/tabbar/nemo.jpg"
-				// "selectedIconPath": "static/tabbar/chat-active.png"
-			},
+			// {
+			// 	"pagePath": "pages/message/index",
+			// 	"text": "消息",
+			// 	"iconPath": "static/images/tabbar/nemo.jpg"
+			// 	// "selectedIconPath": "static/tabbar/chat-active.png"
+			// },
 			{
 				"pagePath": "pages/us/index",
 				"text": "我们",

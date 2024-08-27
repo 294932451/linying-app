@@ -27,6 +27,10 @@ uni.$u.setConfig({
 
 Vue.config.productionTip = false
 
+const baseURL = 'http://39.98.115.211:8787'
+
+Vue.prototype.siteBaseUrl = baseURL + '/api/'
+
 App.mpType = 'app'
 
 const app = new Vue({
