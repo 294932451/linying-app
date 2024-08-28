@@ -4,7 +4,13 @@
 		<Header />
 		<view class="content-wrap">
 			<view class="bg-wrap">
-				<image src="/static/images/bg.png" mode="aspectFit" class="background-image"></image>
+				  <u-swiper
+				            :list="list1"
+				            @change="change"
+				            @click="click"
+							height = "200px"
+				    ></u-swiper>
+				<!-- <image src="/static/images/bg.png" mode="aspectFit" class="background-image"></image> -->
 			</view>
 			<view class="content-text">
 				<uni-title type="h2" title="我们在一起已经" align="center"  style="color: #fff;"></uni-title>
@@ -24,17 +30,17 @@
 		</view>
 
 		<view class="content-card">
-			<view class="card">
+			<view class="card" @click="handleClick('/pages/article/list')">
 				<uni-card :is-shadow="false" is-full>
-					<text class="uni-h6">点点滴滴</text>
+					<text class="uni-h6">碎碎念</text>
 				</uni-card>
 			</view>
-			<view class="card">
+			<view class="card" @click="handleClick('/pages/photos/list')">
 				<uni-card :is-shadow="false" is-full>
-					<text class="uni-h6">关于我们</text>
+					<text class="uni-h6">老照片</text>
 				</uni-card>
 			</view>
-			<view class="card">
+			<!-- <view class="card">
 				<uni-card :is-shadow="false" is-full>
 					<text class="uni-h6">相册</text>
 				</uni-card>
@@ -43,7 +49,7 @@
 				<uni-card :is-shadow="false" is-full>
 					<text class="uni-h6">纪念</text>
 				</uni-card>
-			</view>
+			</view> -->
 
 		</view>
 
@@ -51,6 +57,7 @@
 </template>
 <script>
 	import Header from '@/components/header/Header.vue';
+	import { goToPage } from '@/common/utils.js';
 
 	/**
 	 * 获取任意时间
@@ -155,6 +162,9 @@
 			clearInterval(this.timer);
 		},
 		methods: {
+			 handleClick(url) {
+			      goToPage(url);
+			    },
 			open() {
 				this.$refs.calendar.open()
 			},
@@ -193,7 +203,7 @@
 	border-radius: 10px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 	margin-bottom: 20px;
-
+	height: auto;
 	background-size: cover;
 }
 

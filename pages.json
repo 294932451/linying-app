@@ -20,6 +20,27 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/login/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/article/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/photos/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 
 	],
