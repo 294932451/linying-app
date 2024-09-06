@@ -5,7 +5,7 @@
 		<view class="content-wrap">
 			<view class="bg-wrap">
 				  <u-swiper
-				            :list="list1"
+				            :list="banner"
 				            @change="change"
 				            @click="click"
 							height = "200px"
@@ -35,7 +35,7 @@
 					<text class="uni-h6">碎碎念</text>
 				</uni-card>
 			</view>
-			<view class="card" @click="handleClick('/pages/photos/list')">
+			<view class="card" @click="handleClick('/pages/photo_cate/index')">
 				<uni-card :is-shadow="false" is-full>
 					<text class="uni-h6">老照片</text>
 				</uni-card>
@@ -90,11 +90,7 @@
 		},
 		data() {
 			return {
-				list1: [
-					'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-				],
+				banner: [],
 				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
 
 				showCalendar: false,
@@ -124,6 +120,7 @@
 			},
 		},
 		onLoad() {
+			this.getBanner()
 		
 		},
 		onReady() {
@@ -162,6 +159,17 @@
 			clearInterval(this.timer);
 		},
 		methods: {
+			//获取轮播图
+			getBanner() {
+				uni.request({
+				    url: this.siteBaseUrl + 'banner',
+				    success: (res) => {
+				       this.banner = res.data.data
+				    }
+				});
+
+			},
+			
 			 handleClick(url) {
 			      goToPage(url);
 			    },

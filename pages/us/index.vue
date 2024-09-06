@@ -6,21 +6,34 @@
 		<!-- Main Section -->
 		<view class="main">
 			<view class="album">
-				<u-album :urls="urls2" multipleSize=200></u-album>
+				<u-album :urls="images" multipleSize=200></u-album>
 			</view>
 		</view>
 
 		<!-- Event List -->
 		<view class="event-list">
-			<view class="event-item" v-for="(event, index) in events" :key="index">
-				<view class="event-icon" :class="event.iconClass"></view>
+			<view class="event-row">
+				<view class="event-item" v-for="(event, index) in events.slice(0, 2)" :key="index">
+					<view class="event-icon">
+						<image :src="event.iconClass" mode=""></image>
+					</view>
+					<view class="event-info">
+						<text class="event-name">{{ event.name }}</text>
+						<text class="event-days">{{ event.days !== null ? event.days + ' 天' : '' }}</text>
+					</view>
+				</view>
+			</view>
+			<!-- 其他 event-item 仍然按列排列 -->
+			<view class="event-item" v-for="(event, index) in events.slice(2)" :key="index + 2">
+				<view class="event-icon">
+					<image :src="event.iconClass" mode=""></image>
+				</view>
 				<view class="event-info">
 					<text class="event-name">{{ event.name }}</text>
 					<text class="event-days">{{ event.days !== null ? event.days + ' 天' : '' }}</text>
 				</view>
 			</view>
 		</view>
-	</view>
 	</view>
 </template>
 
@@ -32,43 +45,33 @@
 		},
 		data() {
 			return {
-				days: 100, // 计算得出的相爱天数
-				startDate: '2019-8-20',
-				events: [{
-						name: '猪猪boy您的生日还有',
-						days: 50,
-						iconClass: 'birthday-icon'
-					},
-					{
-						name: '我哈你的生日还有',
-						days: 20,
-						iconClass: 'birthday-icon'
-					},
-					{
-						name: '我们第一次拥抱',
-						days: null,
-						iconClass: 'hug-icon'
-					},
-					{
-						name: '我们第一次接吻',
-						days: null,
-						iconClass: 'kiss-icon'
-					},
-				],
-				urls2: [
-					'/static/images/1.jpg',
-					'/static/images/2.jpg',
-					'/static/images/3.jpg',
-					'/static/images/4.jpg',
-					'/static/images/5.jpg',
-					'/static/images/6.jpg',
-					'/static/images/7.jpg',
-					'/static/images/8.jpg',
-					'/static/images/9.jpg',
-				],
+				events: [],
+				images: [],
 			};
 		},
+		onLoad() {
+			this.getIndex()
+			this.getImages()
+		},
 		methods: {
+			//获取下面列表
+			getIndex() {
+				uni.request({
+					url: this.siteBaseUrl + 'my/index',
+					success: (res) => {
+						this.events = res.data.data
+					}
+				});
+			},
+			//获取轮播图
+			getImages() {
+				uni.request({
+					url: this.siteBaseUrl + 'my/images',
+					success: (res) => {
+						this.images = res.data.data
+					}
+				});
+			},
 			goBack() {
 				uni.navigateBack();
 			}
@@ -85,7 +88,8 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding-top: 70px; /* 增加顶部内边距，确保内容不被头部遮挡 */
+		padding-top: 70px;
+		/* 增加顶部内边距，确保内容不被头部遮挡 */
 	}
 
 
@@ -142,6 +146,12 @@
 	.event-list {
 		margin-top: 20px;
 	}
+	
+	.event-row {
+		display: flex;
+		justify-content: space-between; /* 让两个事件在一排内左右分布 */
+		margin-bottom: 15px;
+	}
 
 	.event-item {
 		display: flex;
@@ -151,6 +161,12 @@
 		margin-bottom: 15px;
 		border-radius: 10px;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+			flex: 1; /* 使事件项在一排内平分空间 */
+			margin-right: 10px; /* 添加间距 */
+	}
+	
+	.event-item:last-child {
+		margin-right: 0; /* 取消最后一个元素的右边距 */
 	}
 
 	.event-icon {
@@ -172,8 +188,12 @@
 	}
 
 	.event-days {
-		font-size: 14px;
-		color: #999;
+		 font-size: 18px;
+		    color: #FFB347; /* 柔和的金色 */
+		    font-weight: bold;
+		    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* 轻微阴影 */
+		    background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+		    border-radius: 8px; /* 圆角背景 */
 	}
 
 	.birthday-icon {
@@ -216,5 +236,14 @@
 	.album img:hover {
 		transform: scale(1.05);
 		/* 放大效果 */
+	}
+
+	.event-icon image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		/* 图片按比例缩放并填充图标区域 */
+		border-radius: 50%;
+		/* 圆形图标 */
 	}
 </style>
