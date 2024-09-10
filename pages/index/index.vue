@@ -6,7 +6,6 @@
 			<view class="bg-wrap">
 				  <u-swiper
 				            :list="banner"
-				            @change="change"
 				            @click="click"
 							height = "200px"
 				    ></u-swiper>
@@ -21,11 +20,11 @@
 		</view>
 		<u-divider text=""></u-divider>
 		<view class="content-notice">
-			<u-notice-bar :text="text1" class="notice-bar" :speed="30"  :fontSize="30"></u-notice-bar>
+			<u-notice-bar :text="xingzuo_notice" class="notice-bar" :speed="30"  :fontSize="30"></u-notice-bar>
 		</view>
 		<view class="content-calendar">
 			<!-- 插入模式 -->
-			<uni-calendar class="uni-calendar--hook" :selected="info.selected" :showMonth="false" @change="change"
+			<uni-calendar lunar class="uni-calendar--hook" :selected="info.selected" :showMonth="true" @change="change"
 				@monthSwitch="monthSwitch" />
 		</view>
 
@@ -91,14 +90,20 @@
 		data() {
 			return {
 				banner: [],
-				text1: 'uView UI众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用',
-
+				xingzuo_notice: '',
 				showCalendar: false,
 				info: {
 					lunar: true,
 					range: true,
 					insert: false,
-					selected: []
+					selected: [ {
+          date: '2024-09-11', // 日期格式为 YYYY-MM-DD
+          info: '签到',
+          data: {
+            custom: '自定义信息',
+            name: '自定义消息头',
+          }
+        },]
 				},
 				startTime: new Date('2024-06-14T00:00:00').getTime(), // 开始计时的时间，可以修改为你需要的时间
 				currentTime: 0,
@@ -121,6 +126,7 @@
 		},
 		onLoad() {
 			this.getBanner()
+			this.getIndex()
 		
 		},
 		onReady() {
@@ -128,28 +134,13 @@
 				this.showCalendar = true
 			})
 			// TODO 模拟请求异步同步数据
-			setTimeout(() => {
-				this.info.date = getDate(new Date(), -30).fullDate
-				this.info.startDate = getDate(new Date(), -60).fullDate
-				this.info.endDate = getDate(new Date(), 30).fullDate
-				this.info.selected = [{
-						date: getDate(new Date(), -3).fullDate,
-						info: '打卡'
-					},
-					{
-						date: getDate(new Date(), -2).fullDate,
-						info: '签到',
-						data: {
-							custom: '自定义信息',
-							name: '自定义消息头'
-						}
-					},
-					{
-						date: getDate(new Date(), -1).fullDate,
-						info: '已打卡'
-					}
-				]
-			}, 2000)
+			// setTimeout(() => {
+			// 	this.info.date = getDate(new Date(), -30).fullDate
+			// 	this.info.startDate = getDate(new Date(), -60).fullDate
+			// 	this.info.endDate = getDate(new Date(), 30).fullDate
+			// 	this.info.selected = [
+			// 	]
+			// }, 2000)
 		},
 		mounted() {
 			this.updateTimer();
@@ -159,6 +150,15 @@
 			clearInterval(this.timer);
 		},
 		methods: {
+			getIndex() {
+				uni.request({
+					url:this.siteBaseUrl + 'index',
+					success: (res) => {
+						this.xingzuo_notice = res.data.data.xing_zuo
+						// this.info.selected = res.data.data.rili
+					}
+				})
+			},
 			//获取轮播图
 			getBanner() {
 				uni.request({
@@ -167,8 +167,8 @@
 				       this.banner = res.data.data
 				    }
 				});
-
 			},
+			
 			
 			 handleClick(url) {
 			      goToPage(url);
@@ -181,8 +181,8 @@
 			},
 			change(e) {
 				console.log('change 返回:', e)
-				// 模拟动态打卡
-				if (this.info.selected.length > 5) return
+				// // 模拟动态打卡
+				// if (this.info.selected.length > 5) return
 				this.info.selected.push({
 					date: e.fulldate,
 					info: '打卡'

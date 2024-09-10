@@ -2,16 +2,15 @@
 	<div class="article-list-container">
 		<div class="header">
 			<h1>甜蜜时刻记录</h1>
-			<p>分享你们的爱情故事</p>
+			<p>分享我们的爱情故事</p>
 		</div>
-
-
 		<ul class="article-list">
-			<li v-for="(article, index) in paginatedArticles" :key="index" class="article-item">
+			<li v-for="(article, index) in paginatedArticles" :key="index" class="article-item"
+				@click="handleClick('/pages/article/detail?id='+ article.id)">
 				<div class="article-content">
 					<h2>{{ article.title }}</h2>
-					<p>{{ article.summary }}</p>
-					<span class="article-date">{{ article.date }}</span>
+					<u--text :lines=1 :text="article.content" color="#fff" size="28"></u--text>
+					<span class="article-date">{{ article.created_at }}</span>
 				</div>
 				<div class="article-icon">
 					<i class="icon-heart"></i>
@@ -38,31 +37,19 @@
 
 
 <script>
-	import { goToPage } from '@/common/utils.js';
+	import {
+		goToPage
+	} from '@/common/utils.js';
 	export default {
 		data() {
 			return {
-				articles: [{
-						title: '我们的初遇',
-						summary: '那天阳光正好，微风不燥...',
-						date: '2024-08-01'
-					},
-					{
-						title: '第一次约会',
-						summary: '在那个浪漫的餐厅，我们...',
-						date: '2024-08-05'
-					},
-					{
-						title: '一起旅行',
-						summary: '我们一起去了那个梦寐以求的地方...',
-						date: '2024-08-10'
-					},
-
-					// 更多文章...
-				],
+				articles: [],
 				currentPage: 1,
 				articlesPerPage: 5,
 			}
+		},
+		onLoad() {
+			this.getData()
 		},
 		computed: {
 			totalPages() {
@@ -74,9 +61,20 @@
 			},
 		},
 		methods: {
+			getData() {
+				uni.request({
+					url: this.siteBaseUrl + 'daily_article/list',
+					success: (res) => {
+						console.log(res);
+						if (res.data.code == 200) {
+							this.articles = res.data.data
+						}
+					}
+				})
+			},
 			handleClick(url) {
-			     goToPage(url);
-			   },
+				goToPage(url);
+			},
 			nextPage() {
 				if (this.currentPage < this.totalPages) {
 					this.currentPage++;
@@ -154,11 +152,6 @@
 		color: #fff;
 	}
 
-	.article-content p {
-		font-size: 14px;
-		color: #ffe1e6;
-		margin: 0;
-	}
 
 	.article-date {
 		font-size: 12px;

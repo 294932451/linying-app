@@ -50,6 +50,13 @@
 			}
 		},
 		{
+			"path" : "pages/article/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
 			"path" : "pages/photo_cate/index",
 			"style" : 
 			{

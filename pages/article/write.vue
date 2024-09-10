@@ -9,90 +9,120 @@
 			<textarea class="content-textarea" placeholder="记录详细内容吧，将成为珍贵的回忆喔~" v-model="content"></textarea>
 
 			<div class="image-upload">
-			<uni-section title="上传" type="line">
-				<view class="example-body">
-					<uni-file-picker limit="9" title="点击此处上传" :image-styles="imageStyles"></uni-file-picker>
-				</view>
-			</uni-section>
+				<uni-section title="上传" type="line">
+					<view class="example-body">
+						<uni-file-picker v-model="localImages" fileMediatype="image" mode="grid" @select="select"
+							limit="9" title="点击此处上传" :image-styles="imageStyles"></uni-file-picker>
+					</view>
+				</uni-section>
 			</div>
 		</div>
-		<button class="complete-button">完成</button>
+		<button class="complete-button" @click="submitForm()">完成</button>
 	</div>
 </template>
 
 
 
 <script>
+	import { goToPage } from '@/common/utils.js';
 	export default {
 		data() {
 			return {
-				title:'',
+				title: '',
 				content: '',
 				imageStyles: {
-									width: 100,
-									height: 100,
-									
-								},listStyles: {
-					
+					width: 100,
+					height: 100,
+
 				},
+				localImages: [], // 用于展示文件选择器中的本地图片
 				selectedImages: [],
-								
+				type:2
+
 			};
 		},
 		methods: {
-			 // 处理图片选择事件
-			    handleFileSelect(files) {
-			      // files 是用户选择的图片文件数组
-			      this.selectedImages = files;
-			    },
-		 // 提交表单
-		    submitForm() {
-		      // 检查是否选择了图片
-		      if (!this.selectedImages.length) {
-		        uni.showToast({
-		          title: '请上传至少一张图片',
-		          icon: 'none'
-		        });
-		        return;
-		      }
-		
-		      // 构建表单数据
-		      const formData = {
-		        title: this.title,
-		        content: this.content,
-		        images: this.selectedImages
-		      };
-		
-		      // 发送请求到后台
-		      uni.request({
-		        url: 'https://example.com/api/upload', // 替换成你的后台API地址
-		        method: 'POST',
-		        data: formData,
-		        header: {
-		          'Content-Type': 'multipart/form-data'
-		        },
-		        success: (res) => {
-		          if (res.statusCode === 200) {
-		            uni.showToast({
-		              title: '提交成功',
-		              icon: 'success'
-		            });
-		          } else {
-		            uni.showToast({
-		              title: '提交失败',
-		              icon: 'none'
-		            });
-		          }
-		        },
-		        fail: (err) => {
-		          uni.showToast({
-		            title: '请求失败',
-		            icon: 'none'
-		          });
-		        }
-		      });
-			  }
-			
+			// 选择文件后触发
+			select(e) {
+				console.log('选择文件：', e);
+				// 调用上传文件的方法，上传选中的文件
+				this.uploadFiles(e.tempFilePaths);
+			},
+			// 上传文件
+			uploadFiles(filePaths) {
+				// 循环上传每个选中的文件
+				filePaths.forEach((filePath) => {
+					uni.uploadFile({
+						url: this.siteBaseUrl + 'upload/file?type='+this.type, // 替换成你的上传API地址
+						filePath: filePath, // 文件的本地路径
+						name: 'file', // 后端接收文件的字段名
+						success: (uploadFileRes) => {
+							const data = JSON.parse(uploadFileRes.data)
+							this.selectedImages.push(data.data.url);
+							this.success();
+						},
+						fail: (err) => {
+							console.error('上传失败', err);
+							this.fail(err);
+						},
+						complete: () => {
+							console.log('上传完成');
+						}
+					});
+				});
+			},
+			// 上传成功
+			success(e) {
+				goto
+			},
+
+			// 上传失败
+			fail(e) {
+				console.log('上传失败：', e);
+			},
+			// 提交表单
+			submitForm() {
+				// 构建表单数据
+				const formData = {
+					title: this.title,
+					content: this.content,
+					images:this.selectedImages,
+				};
+
+				// 发送请求到后台
+				uni.request({
+					url: this.siteBaseUrl + 'daily_article/save', // 替换成你的后台API地址
+					method: 'POST',
+					data: formData,
+					header: {
+						'Content-Type': 'application/json'
+					},
+					success: (res) => {
+						if (res.data.code === 200) {
+							uni.showToast({
+								title: '提交成功',
+								icon: 'success'
+							});
+							setTimeout(function () {
+								goToPage('/pages/article/list')
+							}, 2000);
+							
+						} else {
+							uni.showToast({
+								title: '提交失败',
+								icon: 'none'
+							});
+						}
+					},
+					fail: (err) => {
+						uni.showToast({
+							title: '请求失败',
+							icon: 'none'
+						});
+					}
+				});
+			}
+
 		},
 	};
 </script>
@@ -210,7 +240,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		
+
 	}
 
 
@@ -254,25 +284,27 @@
 	.image-upload-label:hover {
 		background-color: #ffccd1;
 	}
+
 	.example-body {
-			padding: 10px;
-			padding-top: 0;
-		}
-	
-		.custom-image-box {
-			/* #ifndef APP-NVUE */
-			display: flex;
-			/* #endif */
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-		}
-		.title-input {
-			width: 100%;
-			margin-bottom: 10px;
-			font-size: 20px;
-			border: 1px solid #ccc;
-			border-radius: 5px;
-			box-sizing: border-box;
-		}
+		padding: 10px;
+		padding-top: 0;
+	}
+
+	.custom-image-box {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.title-input {
+		width: 100%;
+		margin-bottom: 10px;
+		font-size: 20px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		box-sizing: border-box;
+	}
 </style>

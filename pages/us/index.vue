@@ -30,7 +30,7 @@
 				</view>
 				<view class="event-info">
 					<text class="event-name">{{ event.name }}</text>
-					<text class="event-days">{{ event.days !== null ? event.days + ' 天' : '' }}</text>
+					<text class="event-days">{{ event.days}}</text>
 				</view>
 			</view>
 		</view>
@@ -194,6 +194,7 @@
 		    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* 轻微阴影 */
 		    background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
 		    border-radius: 8px; /* 圆角背景 */
+			margin-left: 10px;
 	}
 
 	.birthday-icon {
