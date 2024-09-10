@@ -4,15 +4,11 @@
 		<Header />
 		<view class="content-wrap">
 			<view class="bg-wrap">
-				  <u-swiper
-				            :list="banner"
-				            @click="click"
-							height = "200px"
-				    ></u-swiper>
+				<u-swiper :list="banner" @click="click" height="200px"></u-swiper>
 				<!-- <image src="/static/images/bg.png" mode="aspectFit" class="background-image"></image> -->
 			</view>
 			<view class="content-text">
-				<uni-title type="h2" title="我们在一起已经" align="center"  style="color: #fff;"></uni-title>
+				<uni-title type="h2" title="我们在一起已经" align="center" style="color: #fff;"></uni-title>
 			</view>
 			<view class="content-time">
 				<p class="time-text">{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟 {{ seconds }} 秒</p>
@@ -20,7 +16,7 @@
 		</view>
 		<u-divider text=""></u-divider>
 		<view class="content-notice">
-			<u-notice-bar :text="xingzuo_notice" class="notice-bar" :speed="30"  :fontSize="30"></u-notice-bar>
+			<u-notice-bar :text="xingzuo_notice" class="notice-bar" :speed="30" :fontSize="30"></u-notice-bar>
 		</view>
 		<view class="content-calendar">
 			<!-- 插入模式 -->
@@ -49,14 +45,24 @@
 					<text class="uni-h6">纪念</text>
 				</uni-card>
 			</view> -->
-
+			<!-- 使用 uni-transition 实现视频页面弹出效果 -->
+			<uni-transition :show="showVideoPage" mode="fade" @after-enter="afterEnter">
+				<view class="video-popup">
+					<button class="close-btn" @click="closeVideo">关闭</button>
+					<video class="video-player" :src="videoSrc" controls autoplay></video>
+				</view>
+			</uni-transition>
 		</view>
+
+
 
 	</view>
 </template>
 <script>
 	import Header from '@/components/header/Header.vue';
-	import { goToPage } from '@/common/utils.js';
+	import {
+		goToPage
+	} from '@/common/utils.js';
 
 	/**
 	 * 获取任意时间
@@ -96,18 +102,13 @@
 					lunar: true,
 					range: true,
 					insert: false,
-					selected: [ {
-          date: '2024-09-11', // 日期格式为 YYYY-MM-DD
-          info: '签到',
-          data: {
-            custom: '自定义信息',
-            name: '自定义消息头',
-          }
-        },]
+					selected: []
 				},
 				startTime: new Date('2024-06-14T00:00:00').getTime(), // 开始计时的时间，可以修改为你需要的时间
 				currentTime: 0,
 				timer: null,
+				showVideoPage: false, // 控制视频页面显示/隐藏
+				videoSrc: 'https://m701.music.126.net/20240910185330/29a5be0f20ef5a9cbad6201a6bd6ccf6/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/45717647879/fbe6/d007/e769/baec51b76381c73e7e46883cfc5747e3.m4a' // 视频链接
 			}
 		},
 		computed: {
@@ -127,7 +128,7 @@
 		onLoad() {
 			this.getBanner()
 			this.getIndex()
-		
+
 		},
 		onReady() {
 			this.$nextTick(() => {
@@ -152,27 +153,27 @@
 		methods: {
 			getIndex() {
 				uni.request({
-					url:this.siteBaseUrl + 'index',
+					url: this.siteBaseUrl + 'index',
 					success: (res) => {
 						this.xingzuo_notice = res.data.data.xing_zuo
-						// this.info.selected = res.data.data.rili
+						this.info.selected = res.data.data.rili
 					}
 				})
 			},
 			//获取轮播图
 			getBanner() {
 				uni.request({
-				    url: this.siteBaseUrl + 'banner',
-				    success: (res) => {
-				       this.banner = res.data.data
-				    }
+					url: this.siteBaseUrl + 'banner',
+					success: (res) => {
+						this.banner = res.data.data
+					}
 				});
 			},
-			
-			
-			 handleClick(url) {
-			      goToPage(url);
-			    },
+
+
+			handleClick(url) {
+				goToPage(url);
+			},
 			open() {
 				this.$refs.calendar.open()
 			},
@@ -181,12 +182,7 @@
 			},
 			change(e) {
 				console.log('change 返回:', e)
-				// // 模拟动态打卡
-				// if (this.info.selected.length > 5) return
-				this.info.selected.push({
-					date: e.fulldate,
-					info: '打卡'
-				})
+				this.showVideoPage = true; // 点击日期后显示视频页面
 			},
 			confirm(e) {
 				console.log('confirm 返回:', e)
@@ -198,111 +194,162 @@
 				const now = new Date().getTime();
 				this.currentTime = now - this.startTime;
 			},
+			closeVideo() {
+				this.showVideoPage = false; // 关闭视频页面
+			}
 		}
 	}
 </script>
 
 <style scoped>
-/* 背景图片 */
-.bg-wrap {
-	width: 100%;
-	overflow: hidden;
-	position: relative;
-	border-radius: 10px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-	margin-bottom: 20px;
-	height: auto;
-	background-size: cover;
-}
+	/* 背景图片 */
+	.bg-wrap {
+		width: 100%;
+		overflow: hidden;
+		position: relative;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+		margin-bottom: 20px;
+		height: auto;
+		background-size: cover;
+	}
 
-.background-image {
-	width: 100%;
-	border-radius: 10px;
-}
+	.background-image {
+		width: 100%;
+		border-radius: 10px;
+	}
 
-/* 时间显示部分 */
-.content-time {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 10px;
-}
+	/* 时间显示部分 */
+	.content-time {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 10px;
+	}
 
-.time-text {
-	font-size: 22px;
-	font-weight: bold;
-	color: #fff;
-	background-color: rgba(0, 0, 0, 0.6);
-	padding: 15px 25px;
-	border-radius: 12px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-	text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* 发光效果 */
-}
+	.time-text {
+		font-size: 22px;
+		font-weight: bold;
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0.6);
+		padding: 15px 25px;
+		border-radius: 12px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+		text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+		/* 发光效果 */
+	}
 
-/* 通知栏 */
-.content-notice {
-	margin: 15px 10px;
-}
+	/* 通知栏 */
+	.content-notice {
+		margin: 15px 10px;
+	}
 
-.notice-bar {
-	background-color: rgba(0, 0, 0, 0.8);
-	color: #fff;
-	border-radius: 8px;
-	padding: 5px 10px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
+	.notice-bar {
+		background-color: rgba(0, 0, 0, 0.8);
+		color: #fff;
+		border-radius: 8px;
+		padding: 5px 10px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	}
 
-/* 日历部分 */
-.content-calendar {
-	margin-top: 20px;
-	padding: 0 10px;
-}
+	/* 日历部分 */
+	.content-calendar {
+		margin-top: 20px;
+		padding: 0 10px;
+	}
 
-.uni-calendar--hook {
-	border-radius: 10px;
-	background-color: rgba(255, 255, 255, 0.9);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-	padding: 10px;
-}
+	.uni-calendar--hook {
+		border-radius: 10px;
+		background-color: rgba(255, 255, 255, 0.9);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+		padding: 10px;
+	}
 
-/* 卡片部分 */
-.content-card {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	margin-top: 20px;
-	padding: 0 10px;
-}
+	/* 卡片部分 */
+	.content-card {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		margin-top: 20px;
+		padding: 0 10px;
+	}
 
-.content-card .card {
-	flex: 1;
-	min-width: 48%;
-	margin-bottom: 20px;
-}
+	.content-card .card {
+		flex: 1;
+		min-width: 48%;
+		margin-bottom: 20px;
+	}
 
-.uni-card {
-	border-radius: 10px;
-	background-color: rgba(0, 0, 0, 0.6);
-	color: #fff;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-	padding: 15px;
-	text-shadow: 0 0 3px rgba(255, 255, 255, 0.3); /* 轻微发光效果 */
-}
+	.uni-card {
+		border-radius: 10px;
+		background-color: rgba(0, 0, 0, 0.6);
+		color: #fff;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+		padding: 15px;
+		text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+		/* 轻微发光效果 */
+	}
 
-.uni-h6 {
-	font-size: 18px;
-	font-weight: 500;
-	color: #fff;
-}
+	.uni-h6 {
+		font-size: 18px;
+		font-weight: 500;
+		color: #fff;
+	}
 
-/* 通用样式 */
-.container {
-   padding: 20px 0;
-      background: url('/static/images/pink-bg.png') no-repeat center center; /* 替换为你的星空背景图 */
-      background-size: cover;
-      min-height: 100vh;
-      color: #fff;
-	  padding-top: 70px; /* 增加顶部内边距，确保内容不被头部遮挡 */
-}
-
+	/* 通用样式 */
+	.container {
+		padding: 20px 0;
+		background: url('/static/images/pink-bg.png') no-repeat center center;
+		/* 替换为你的星空背景图 */
+		background-size: cover;
+		min-height: 100vh;
+		color: #fff;
+		padding-top: 70px;
+		/* 增加顶部内边距，确保内容不被头部遮挡 */
+	}
+	/* 视频弹窗的样式 */
+	.video-popup {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90%;
+		height: 60%;
+		background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+		border-radius: 15px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		z-index: 1; /* 调高 z-index 以确保在所有内容上方显示 */
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+		background-image: url('/static/images/video-bg.png'); /* 替换为适合的视频背景图片 */
+		background-size: cover;
+		background-position: center;
+	}
+	
+	/* 视频播放器 */
+	.video-player {
+		width: 100%;
+		height: 100%;
+		border-radius: 10px;
+	}
+	
+	/* 关闭按钮样式 */
+	.close-btn {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background-color: rgba(255, 0, 0, 0.7);
+		color: white;
+		border: none;
+		border-radius: 50%;
+		padding: 10px;
+		cursor: pointer;
+		z-index: 3000; /* 确保按钮显示在视频内容上方 */
+	}
+	
+	.close-btn:hover {
+		background-color: rgba(255, 0, 0, 0.9);
+	}
 </style>
