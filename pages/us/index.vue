@@ -94,12 +94,7 @@
 
 
 
-	.add-icon {
-		width: 20px;
-		height: 20px;
-		background-image: url('/static/icons/add.png');
-		/* 替换为加号图标的路径 */
-	}
+
 
 	.title {
 		font-size: 18px;
@@ -197,20 +192,8 @@
 			margin-left: 10px;
 	}
 
-	.birthday-icon {
-		background-image: url('/static/icons/birthday.png');
-		/* 替换为生日图标的路径 */
-	}
 
-	.hug-icon {
-		background-image: url('/static/icons/hug.png');
-		/* 替换为拥抱图标的路径 */
-	}
 
-	.kiss-icon {
-		background-image: url('/static/icons/kiss.png');
-		/* 替换为接吻图标的路径 */
-	}
 
 	.album {
 		display: flex;

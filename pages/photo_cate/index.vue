@@ -3,14 +3,14 @@
     <view class="header">
       <text class="title">甜蜜相册</text>
     </view>
-    <view class="album-grid" @click="handleClick('/pages/photos/list')">
+    <view class="album-grid">
       <view 
         class="album-item" 
         v-for="(album, index) in albums" 
         :key="index"
-        @click="goToAlbum(album.id)"
+        @click="goToAlbum(`/pages/photos/list?cate_id=${album.id}&cover=${album.cover}&cate_name=${album.name}`)"
       >
-        <image :src="album.cover" class="album-thumbnail"></image>
+	   <image style="width: 200px; height: 200px; " :src="album.cover" mode="aspectFill"></image>
         <text class="album-title">{{ album.name }}</text>
       </view>
     </view>
@@ -38,14 +38,11 @@
 					url:this.siteBaseUrl + 'photo/cate',
 					success: (res) => {
 					   this.albums = res.data.data
-					   console.log('11',this.albums)
 					}
 				}) 
 			 },
-	    goToAlbum(albumId) {
-	      uni.navigateTo({
-	        url: `/pages/albumDetail/albumDetail?id=${albumId}`
-	      });
+	    goToAlbum(url) {
+			goToPage(url)
 	    }
 	  }
 	};
@@ -77,7 +74,7 @@
 	}
 	
 	.album-item {
-	  width: 48%;
+	  width: 45%;
 	  background-color: #fff;
 	  border-radius: 15px;
 	  overflow: hidden;
@@ -92,7 +89,7 @@
 	
 	.album-thumbnail {
 		width: 100%;
-		height: 150px; /* 图片高度自动根据宽度调整 */
+		height: auto; /* 图片高度自动根据宽度调整 */
 		max-height: 200px; /* 限制最大高度 */
 		object-fit: cover;
 		border-bottom: 2px solid #ff6f91;

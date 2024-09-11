@@ -3,7 +3,7 @@
 	<view class="header-wrap">
 		<view class="header">
 			<view class="logo">
-				<h1><a class="alogo" href="#">关于我们</a></h1>
+				<h3><a class="alogo" href="#">关于我们</a></h3>
 			</view>
 			<view class="word">
 				<span class="wenan">喜欢这个世界，更喜欢你</span>
@@ -62,7 +62,7 @@
 
 .header-wrap .header .word {
 	font-family: 'Noto Serif SC', serif;
-	font-weight: 400;
+	font-weight: 300;
 	font-size: 1.2rem; /* 稍微增大字体 */
 	text-align: right;
 	color: #666; /* 使标语颜色稍淡，与标题形成对比 */

@@ -2,10 +2,13 @@
 	<view class="container">
 		<!-- 头部导航条 -->
 		<Header />
+		<!-- 添加音频播放器 -->
+		<view class="floating-audio-btn" @tap="playAudio">
+			<text>{{ isPlaying  ? '暂停' : '听歌' }}</text>
+		</view>
 		<view class="content-wrap">
 			<view class="bg-wrap">
-				<u-swiper :list="banner" @click="click" height="200px"></u-swiper>
-				<!-- <image src="/static/images/bg.png" mode="aspectFit" class="background-image"></image> -->
+				<u-swiper :list="banner" height="200px"></u-swiper>
 			</view>
 			<view class="content-text">
 				<uni-title type="h2" title="我们在一起已经" align="center" style="color: #fff;"></uni-title>
@@ -46,12 +49,15 @@
 				</uni-card>
 			</view> -->
 			<!-- 使用 uni-transition 实现视频页面弹出效果 -->
-			<uni-transition :show="showVideoPage" mode="fade" @after-enter="afterEnter">
-				<view class="video-popup">
+			<uni-transition :show="showVideoPage" mode="fade" :duration="300">
+				<view class="video-popup" :style="{ zIndex: showVideoPage ? 999 : -1 }">
 					<button class="close-btn" @click="closeVideo">关闭</button>
-					<video class="video-player" :src="videoSrc" controls autoplay></video>
+					<video id="myVideo" src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/wap2appvsnative.mp4"
+						>
+					</video>
 				</view>
 			</uni-transition>
+
 		</view>
 
 
@@ -95,6 +101,8 @@
 		},
 		data() {
 			return {
+				audioContext: null, // 音频上下文
+				isPlaying: false, // 音频是否在播放
 				banner: [],
 				xingzuo_notice: '',
 				showCalendar: false,
@@ -108,7 +116,7 @@
 				currentTime: 0,
 				timer: null,
 				showVideoPage: false, // 控制视频页面显示/隐藏
-				videoSrc: 'https://m701.music.126.net/20240910185330/29a5be0f20ef5a9cbad6201a6bd6ccf6/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/45717647879/fbe6/d007/e769/baec51b76381c73e7e46883cfc5747e3.m4a' // 视频链接
+				videoSrc: 'https://linying01.oss-cn-beijing.aliyuncs.com/%E6%9C%89%E6%88%91%E5%91%A2.wav' // 视频链接
 			}
 		},
 		computed: {
@@ -126,8 +134,14 @@
 			},
 		},
 		onLoad() {
+			// 初始化音频上下文
+			this.audioContext = uni.createInnerAudioContext();
+			this.audioContext.src = this.videoSrc; // 替换成你的音频文件地址
+			console.log('+++++++++', this.audioContext.src);
+			this.audioContext.autoplay = false; // 设置为 false，用户手动控制
 			this.getBanner()
 			this.getIndex()
+
 
 		},
 		onReady() {
@@ -151,6 +165,15 @@
 			clearInterval(this.timer);
 		},
 		methods: {
+			// 控制音频播放和暂停
+			playAudio() {
+				if (this.isPlaying) {
+					this.audioContext.pause(); // 暂停音频
+				} else {
+					this.audioContext.play(); // 播放音频
+				}
+				this.isPlaying = !this.isPlaying; // 切换播放状态
+			},
 			getIndex() {
 				uni.request({
 					url: this.siteBaseUrl + 'index',
@@ -182,7 +205,9 @@
 			},
 			change(e) {
 				console.log('change 返回:', e)
-				this.showVideoPage = true; // 点击日期后显示视频页面
+				if (Object.keys(e.extraInfo).length) {
+					this.showVideoPage = true; // 点击日期后显示视频页面
+				}
 			},
 			confirm(e) {
 				console.log('confirm 返回:', e)
@@ -197,11 +222,45 @@
 			closeVideo() {
 				this.showVideoPage = false; // 关闭视频页面
 			}
+		},
+		onUnload() {
+			// 页面销毁时释放音频资源
+			if (this.audioContext) {
+				this.audioContext.destroy();
+			}
 		}
 	}
 </script>
 
 <style scoped>
+	/* 悬浮按钮样式 */
+	.floating-audio-btn {
+		position: fixed;
+		/* 固定定位 */
+		top: 380px;
+		/* 距离页面底部20px */
+		right: 10px;
+		/* 距离页面右侧20px */
+		width: 60px;
+		/* 按钮宽度 */
+		height: 60px;
+		/* 按钮高度 */
+		/* background-color: #007aff; */
+		/* 按钮背景颜色 */
+		color: #fff;
+		/* 字体颜色 */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		/* 圆形按钮 */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+		/* 阴影效果 */
+		z-index: 1;
+		/* 确保在页面内容的上层 */
+		font-size: 18px;
+	}
+
 	/* 背景图片 */
 	.bg-wrap {
 		width: 100%;
@@ -307,6 +366,7 @@
 		padding-top: 70px;
 		/* 增加顶部内边距，确保内容不被头部遮挡 */
 	}
+
 	/* 视频弹窗的样式 */
 	.video-popup {
 		position: fixed;
@@ -315,26 +375,29 @@
 		transform: translate(-50%, -50%);
 		width: 90%;
 		height: 60%;
-		background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+		background-color: rgba(255, 255, 255, 0.9);
+		/* 半透明白色背景 */
 		border-radius: 15px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		z-index: 1; /* 调高 z-index 以确保在所有内容上方显示 */
+		z-index: 1;
+		/* 调高 z-index 以确保在所有内容上方显示 */
 		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
-		background-image: url('/static/images/video-bg.png'); /* 替换为适合的视频背景图片 */
+		/* background-image: url('/static/images/video-bg.png'); */
+		/* 替换为适合的视频背景图片 */
 		background-size: cover;
 		background-position: center;
 	}
-	
+
 	/* 视频播放器 */
 	.video-player {
 		width: 100%;
 		height: 100%;
 		border-radius: 10px;
 	}
-	
+
 	/* 关闭按钮样式 */
 	.close-btn {
 		position: absolute;
@@ -346,9 +409,9 @@
 		border-radius: 50%;
 		padding: 10px;
 		cursor: pointer;
-		z-index: 3000; /* 确保按钮显示在视频内容上方 */
+		/* 确保按钮显示在视频内容上方 */
 	}
-	
+
 	.close-btn:hover {
 		background-color: rgba(255, 0, 0, 0.9);
 	}
