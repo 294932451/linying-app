@@ -1,9 +1,17 @@
 {
 	// 如果您是通过uni_modules形式引入uView，可以忽略此配置
-	"easycom": {
-		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
-	},
-	"pages": [{
+	// "easycom": {
+	// 	"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
+	// },
+	"pages": [
+		{
+			"path" : "pages/login/login",
+			"style" : 
+			{
+				"navigationStyle" : ""
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"
@@ -21,13 +29,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		{
-			"path" : "pages/login/login",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
+		
 		{
 			"path" : "pages/article/list",
 			"style" : 
@@ -94,7 +96,7 @@
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "linying - app",
+		"navigationBarTitleText": "Love Ying",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {

@@ -3,7 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import uView from '@/uni_modules/uview-ui'
+import VueI18n from 'vue-i18n'
+import zh from 'static/lang/zh.js'
+import en from 'static/lang/en.js'
 Vue.use(uView)
+Vue.use(VueI18n)
 
 // 调用setConfig方法，方法内部会进行对象属性深度合并，可以放心嵌套配置
 // 需要在Vue.use(uView)之后执行
@@ -25,15 +29,25 @@ uni.$u.setConfig({
 })
 
 
+
 Vue.config.productionTip = false
 
 const baseURL = 'http://39.98.115.211:8787'
 
-Vue.prototype.siteBaseUrl = baseURL + '/api/'
+// 获取用户当前语言，默认使用中文
+const i18n = new VueI18n({
+  locale: 'zh', // 设置默认语言
+  messages: {
+      zh,
+      en,
+    },
+})
 
+Vue.prototype.siteBaseUrl = baseURL + '/api/'
 App.mpType = 'app'
 
 const app = new Vue({
+	i18n,  // 将 i18n 实例传递给 Vue 实例
     ...App
 })
 app.$mount()

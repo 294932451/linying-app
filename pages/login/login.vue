@@ -6,7 +6,7 @@
 		</div>
 		<div class="login-form">
 			<div class="form-header">
-				<p>与心爱的Ta一起登录</p>
+				<p>{{$t('login.title')}}</p>
 			</div>
 			<div class="avatar-selection">
 				<div class="avatar" v-for="(avatar, index) in defaultAvatar" :key="index">
@@ -15,15 +15,15 @@
 			</div>
 			<div class="input-group">
 				<i class="icon-user"></i>
-				<input type="text" v-model="username" placeholder="用户名" class="input-field" />
+				<input type="text" v-model="username" :placeholder=" $t('login.username') " class="input-field" />
 			</div>
 			<div class="input-group">
 				<i class="icon-lock"></i>
-				<input type="password" v-model="password" placeholder="密码" class="input-field" />
+				<input type="password" v-model="password" :placeholder="$t('login.password')" class="input-field" />
 			</div>
 			<button @click="login" class="login-button">
 				<i class="icon-heart"></i>
-				登录
+				{{$t('login.login')}}
 			</button>
 			<div class="bottom-decoration"></div>
 		</div>
@@ -35,22 +35,47 @@
 <script>
 	export default {
 		data() {
-			
 			return {
 				username: '',
 				password: '',
 				defaultAvatar: [
-					"/static/images/tabbar/tong.jpg",
-					"/static/images/tabbar/lin.jpg",
+					"http://39.98.115.211:8787/app/admin/upload/img/20240912/66e2b6609949.jpg",
+					"http://39.98.115.211:8787/app/admin/upload/img/20240912/66e2b6577353.jpg",
 				],
 			};
 		},
 		methods: {
 			login() {
-				// 登录逻辑处理
-				uni.switchTab({
-					url:'/pages/index/index'
+				uni.request({
+					url:this.siteBaseUrl + 'login/login',
+					method:'POST',
+					data:{
+						username:this.username,
+						password:this.password
+					},
+					success: (res) => {
+						console.log(res);
+						if(res.data.code==200) {
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'success'
+							});
+							setTimeout(function () {
+								uni.switchTab({
+									url:'/pages/index/index'
+								})
+							}, 2000);
+							// 登录逻辑处理
+							
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'error'
+							});
+						}
+					}
 				})
+				
 				
 			},
 		},
@@ -182,7 +207,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 100%;
+		width: 80%;
 		padding: 12px;
 		background: linear-gradient(135deg, #ff6f91, #ff4f70);
 		border: none;
@@ -208,7 +233,6 @@
 		transform: translateX(-50%);
 		width: 150px;
 		height: 60px;
-	
 		opacity: 0.8;
 	}
 </style>
