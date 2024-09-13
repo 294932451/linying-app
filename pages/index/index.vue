@@ -4,17 +4,18 @@
 		<Header />
 		<!-- 添加音频播放器 -->
 		<view class="floating-audio-btn" @tap="playAudio">
-			<text>{{ isPlaying  ? '暂停' : '听歌' }}</text>
+			<text>{{ isPlaying  ? $t('index.pause') : $t('index.play') }}</text>
 		</view>
 		<view class="content-wrap">
 			<view class="bg-wrap">
 				<u-swiper :list="banner" height="200px"></u-swiper>
 			</view>
 			<view class="content-text">
-				<uni-title type="h2" title="我们在一起已经" align="center" style="color: #fff;"></uni-title>
+				<uni-title type="h2" :title="$t('index.together')" align="center" style="color: #fff;"></uni-title>
 			</view>
 			<view class="content-time">
-				<p class="time-text">{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟 {{ seconds }} 秒</p>
+				<p class="time-text">{{ days }} {{$t('index.days')}} {{ hours }} {{$t('index.hours')}} {{ minutes }}
+					{{$t('index.minutes')}} {{ seconds }} {{$t('index.seconds')}}</p>
 			</view>
 		</view>
 		<u-divider text=""></u-divider>
@@ -30,12 +31,12 @@
 		<view class="content-card">
 			<view class="card" @click="handleClick('/pages/article/list')">
 				<uni-card :is-shadow="false" is-full>
-					<text class="uni-h6">碎碎念</text>
+					<text class="uni-h6">{{$t('index.suisuinian')}}</text>
 				</uni-card>
 			</view>
 			<view class="card" @click="handleClick('/pages/photo_cate/index')">
 				<uni-card :is-shadow="false" is-full>
-					<text class="uni-h6">老照片</text>
+					<text class="uni-h6">{{$t('index.old_photos')}}</text>
 				</uni-card>
 			</view>
 			<!-- <view class="card">
@@ -52,8 +53,7 @@
 			<uni-transition :show="showVideoPage" mode="fade" :duration="300">
 				<view class="video-popup" :style="{ zIndex: showVideoPage ? 999 : -1 }">
 					<button class="close-btn" @click="closeVideo">关闭</button>
-					<video id="myVideo" src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/wap2appvsnative.mp4"
-						>
+					<video id="myVideo" src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/wap2appvsnative.mp4">
 					</video>
 				</view>
 			</uni-transition>
@@ -69,6 +69,7 @@
 	import {
 		goToPage
 	} from '@/common/utils.js';
+	import request from '../../common/request';
 
 	/**
 	 * 获取任意时间
@@ -137,7 +138,6 @@
 			// 初始化音频上下文
 			this.audioContext = uni.createInnerAudioContext();
 			this.audioContext.src = this.videoSrc; // 替换成你的音频文件地址
-			console.log('+++++++++', this.audioContext.src);
 			this.audioContext.autoplay = false; // 设置为 false，用户手动控制
 			this.getBanner()
 			this.getIndex()
@@ -148,14 +148,6 @@
 			this.$nextTick(() => {
 				this.showCalendar = true
 			})
-			// TODO 模拟请求异步同步数据
-			// setTimeout(() => {
-			// 	this.info.date = getDate(new Date(), -30).fullDate
-			// 	this.info.startDate = getDate(new Date(), -60).fullDate
-			// 	this.info.endDate = getDate(new Date(), 30).fullDate
-			// 	this.info.selected = [
-			// 	]
-			// }, 2000)
 		},
 		mounted() {
 			this.updateTimer();
@@ -175,22 +167,30 @@
 				this.isPlaying = !this.isPlaying; // 切换播放状态
 			},
 			getIndex() {
-				uni.request({
-					url: this.siteBaseUrl + 'index',
-					success: (res) => {
-						this.xingzuo_notice = res.data.data.xing_zuo
-						this.info.selected = res.data.data.rili
-					}
+				request({
+					url: 'index',
+				}).then(res => {
+					this.xingzuo_notice = res.data.xing_zuo
+					this.info.selected = res.data.rili
+				}).catch(err => {
+					uni.showToast({
+						title: '服务异常',
+						icon: 'error'
+					})
 				})
 			},
 			//获取轮播图
 			getBanner() {
-				uni.request({
-					url: this.siteBaseUrl + 'banner',
-					success: (res) => {
-						this.banner = res.data.data
-					}
-				});
+				request({
+					url: 'banner',
+				}).then(res => {
+					this.banner = res.data
+				}).catch(err => {
+					uni.showToast({
+						title: '服务异常',
+						icon: 'error'
+					})
+				})
 			},
 
 

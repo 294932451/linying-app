@@ -6,6 +6,7 @@ import uView from '@/uni_modules/uview-ui'
 import VueI18n from 'vue-i18n'
 import zh from 'static/lang/zh.js'
 import en from 'static/lang/en.js'
+import store from './common/store'
 Vue.use(uView)
 Vue.use(VueI18n)
 
@@ -47,6 +48,7 @@ Vue.prototype.siteBaseUrl = baseURL + '/api/'
 App.mpType = 'app'
 
 const app = new Vue({
+	store,
 	i18n,  // 将 i18n 实例传递给 Vue 实例
     ...App
 })

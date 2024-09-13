@@ -20,6 +20,7 @@
 
 <script>
 	import { goToPage } from '@/common/utils.js';
+	import request from '../../common/request';
 	export default {
 	  data() {
 	    return {
@@ -34,12 +35,17 @@
 		       goToPage(url);
 		     },
 			 get_cate() {
-				uni.request({
-					url:this.siteBaseUrl + 'photo/cate',
-					success: (res) => {
-					   this.albums = res.data.data
-					}
-				}) 
+				 request({
+				 	url:'photo/cate',
+				 }).then(res=>{
+				 	this.albums = res.data
+				 }).catch(err=>{
+				 	uni.showToast({
+				 		title:'服务异常',
+				 		icon:'error'
+				 	})
+				 })
+				
 			 },
 	    goToAlbum(url) {
 			goToPage(url)

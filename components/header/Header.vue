@@ -3,10 +3,10 @@
 	<view class="header-wrap">
 		<view class="header">
 			<view class="logo">
-				<h3><a class="alogo" href="#">关于我们</a></h3>
+				<h3><a class="alogo" href="#">{{$t('header.title_left')}}</a></h3>
 			</view>
 			<view class="word">
-				<span class="wenan">喜欢这个世界，更喜欢你</span>
+				<span class="wenan">{{$t('header.title_right')}}</span>
 			</view>
 		</view>
 	</view>

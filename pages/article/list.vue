@@ -40,6 +40,7 @@
 	import {
 		goToPage
 	} from '@/common/utils.js';
+	import request from '../../common/request';
 	export default {
 		data() {
 			return {
@@ -62,15 +63,17 @@
 		},
 		methods: {
 			getData() {
-				uni.request({
-					url: this.siteBaseUrl + 'daily_article/list',
-					success: (res) => {
-						console.log(res);
-						if (res.data.code == 200) {
-							this.articles = res.data.data
-						}
-					}
+				request({
+					url:'daily_article/list',
+				}).then(res=>{
+					this.articles = res.data
+				}).catch(err=>{
+					uni.showToast({
+						title:'服务异常',
+						icon:'error'
+					})
 				})
+				
 			},
 			handleClick(url) {
 				goToPage(url);
@@ -107,7 +110,6 @@
 
 	.header {
 		text-align: center;
-		margin-bottom: 20px;
 	}
 
 	.header h1 {
@@ -160,7 +162,7 @@
 	}
 
 	.article-icon i {
-		font-size: 24px;
+		font-size: 18px;
 		color: #ff6f91;
 	}
 
@@ -169,6 +171,7 @@
 		justify-content: center;
 		align-items: center;
 		margin: 20px 0;
+		height: 30px;
 	}
 
 	.pagination button {
@@ -206,7 +209,7 @@
 
 	.fab-button {
 		position: fixed;
-		bottom: 70px;
+		bottom: 110px;
 		right: 20px;
 		width: 60px;
 		height: 60px;

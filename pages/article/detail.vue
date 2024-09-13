@@ -22,7 +22,8 @@
 				<div class="diary-label">上传的图片</div>
 				<div class="image-preview">
 					<div v-for="(image, index) in selectedImages" :key="index" class="image-item">
-						<img :src="image" alt="日志图片" />
+						<image style="width: 200px; height: 200px; background-color: #eeeeee;" :src="image"
+							@tap="previewImage(index, selectedImages)" mode="aspectFill"></image>
 					</div>
 				</div>
 			</div>
@@ -31,31 +32,39 @@
 </template>
 
 <script>
+	import request from '../../common/request';
 	export default {
 		data() {
 			return {
-				title:'',
-				content:'',
-				selectedImages:[],
-				date_time:'',
+				title: '',
+				content: '',
+				selectedImages: [],
+				date_time: '',
 			};
 		},
 		onLoad(e) {
-			console.log(e);
 			this.getData(e)
 		},
 		methods: {
+			previewImage(index, images) {
+				uni.previewImage({
+					current: images[index], // 当前显示的图片的 URL
+					urls: images // 图片 URL 数组
+				});
+			},
 			getData(e) {
-				uni.request({
-					url:this.siteBaseUrl + 'daily_article/detail/' + e.id,
-					success: (res) => {
-						if(res.data.code==200) {
-							this.title = res.data.data.title
-							this.content = res.data.data.content
-							this.date_time = res.data.data.created_at
-							this.selectedImages = res.data.data.images
-						}
-					}
+				request({
+					url: 'daily_article/detail/' + e.id,
+				}).then(res => {
+					this.title = res.data.title
+					this.content = res.data.content
+					this.date_time = res.data.created_at
+					this.selectedImages = res.data.images
+				}).catch(err => {
+					uni.showToast({
+						title: '服务异常',
+						icon: 'error'
+					})
 				})
 			}
 		},

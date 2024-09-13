@@ -34,35 +34,35 @@
 			"path" : "pages/article/list",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : ""
 			}
 		},
 		{
 			"path" : "pages/photos/list",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : ""
 			}
 		},
 		{
 			"path" : "pages/article/write",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : ""
 			}
 		},
 		{
 			"path" : "pages/article/detail",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : ""
 			}
 		},
 		{
 			"path" : "pages/photo_cate/index",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle" : ""
 			}
 		}
 

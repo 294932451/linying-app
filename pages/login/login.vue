@@ -33,6 +33,7 @@
 
 
 <script>
+	import request from '@/common/request.js'
 	export default {
 		data() {
 			return {
@@ -45,39 +46,52 @@
 			};
 		},
 		methods: {
-			login() {
-				uni.request({
-					url:this.siteBaseUrl + 'login/login',
-					method:'POST',
-					data:{
-						username:this.username,
-						password:this.password
-					},
-					success: (res) => {
-						console.log(res);
-						if(res.data.code==200) {
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'success'
-							});
-							setTimeout(function () {
-								uni.switchTab({
-									url:'/pages/index/index'
-								})
-							}, 2000);
-							// 登录逻辑处理
-							
-						}else{
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'error'
-							});
-						}
-					}
-				})
-				
-				
-			},
+		login() {
+			request({
+				url: 'login/login',
+				method: 'POST',
+				data: {
+					username: this.username,
+					password: this.password
+				},
+			}).then(res => {
+				if (res.code == 200) {
+					// 登录成功，将 token、refreshToken 和 userinfo 保存到本地存储
+					const {
+						accessToken,
+						refreshToken,
+						userInfo
+					} = res.data;
+					// 存储 accessToken
+					uni.setStorageSync('access_token', accessToken);
+					// 存储 refreshToken
+					uni.setStorageSync('refresh_token', refreshToken);
+					// 存储用户信息
+					uni.setStorageSync('user_info', userInfo);
+					uni.showToast({
+						title: res.msg,
+						icon: 'success'
+					});
+					setTimeout(function(){
+						uni.switchTab({
+							url:'/pages/index/index'
+						})
+					},2000)
+				} else {
+					uni.showToast({
+						title: res.msg,
+						icon: 'success'
+					})
+				}
+				console.log(res);
+			}).catch(err => {
+				console.log(err);
+				uni.showToast({
+					title: '登录失败，请重试',
+					icon: 'none'
+				});
+			})
+		},
 		},
 	};
 </script>

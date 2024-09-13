@@ -16,7 +16,7 @@
 			<view class="photo-grid">
 				<view class="photo-item" v-for="(photo, index) in group.photos" :key="index">
 					<image style="width: 100%; height: 300px; " :src="photo.url" mode="aspectFill"
-						@tap="previewImage(group.url,group.photos)"></image>
+						@tap="previewImage(photo.url,group.photos)"></image>
 				</view>
 			</view>
 		</view>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+	import request from '../../common/request';
 	export default {
 		data() {
 			return {
@@ -53,12 +54,16 @@
 				})
 			},
 			getPhotos() {
-				uni.request({
-					url: this.siteBaseUrl + 'photo/list/' + this.cate_id,
-					success: (res) => {
-						this.total = res.data.data.count
-						this.photoGroups = res.data.data
-					}
+				request({
+					url: 'photo/list/' + this.cate_id,
+				}).then(res=>{
+					this.total = res.data.count
+					this.photoGroups = res.data
+				}).catch(err=>{
+					uni.showToast({
+						title:'服务异常',
+						icon:'error'
+					})
 				})
 			},
 			chooseImage() {

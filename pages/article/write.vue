@@ -25,6 +25,7 @@
 
 <script>
 	import { goToPage } from '@/common/utils.js';
+	import request from '../../common/request';
 	export default {
 		data() {
 			return {
@@ -90,37 +91,30 @@
 				};
 
 				// 发送请求到后台
-				uni.request({
-					url: this.siteBaseUrl + 'daily_article/save', // 替换成你的后台API地址
-					method: 'POST',
+				request({
+					url:'daily_article/save',
+					method:'POST',
 					data: formData,
 					header: {
 						'Content-Type': 'application/json'
 					},
-					success: (res) => {
-						if (res.data.code === 200) {
-							uni.showToast({
-								title: '提交成功',
-								icon: 'success'
-							});
-							setTimeout(function () {
-								goToPage('/pages/article/list')
-							}, 2000);
-							
-						} else {
-							uni.showToast({
-								title: '提交失败',
-								icon: 'none'
-							});
-						}
-					},
-					fail: (err) => {
+				}).then(res=>{
+					if (res.code === 200) {
 						uni.showToast({
-							title: '请求失败',
-							icon: 'none'
+							title: '提交成功',
+							icon: 'success'
 						});
-					}
-				});
+						setTimeout(function () {
+							goToPage('/pages/article/list')
+						}, 2000);
+						}
+				}).catch(err=>{
+					uni.showToast({
+						title:'服务异常',
+						icon:'error'
+					})
+				})
+		
 			}
 
 		},

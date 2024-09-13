@@ -39,6 +39,7 @@
 
 <script>
 	import Header from '@/components/header/Header.vue';
+	import request from '../../common/request';
 	export default {
 		components: {
 			Header
@@ -56,21 +57,29 @@
 		methods: {
 			//获取下面列表
 			getIndex() {
-				uni.request({
-					url: this.siteBaseUrl + 'my/index',
-					success: (res) => {
-						this.events = res.data.data
-					}
-				});
+				request({
+					url: 'my/index',
+				}).then(res=>{
+					this.events = res.data
+				}).catch(err=>{
+					uni.showToast({
+						title:'服务异常',
+						icon:'error'
+					})
+				})
 			},
 			//获取轮播图
 			getImages() {
-				uni.request({
-					url: this.siteBaseUrl + 'my/images',
-					success: (res) => {
-						this.images = res.data.data
-					}
-				});
+				request({
+					url: 'my/images',
+				}).then(res=>{
+					this.images = res.data
+				}).catch(err=>{
+					uni.showToast({
+						title:'服务异常',
+						icon:'error'
+					})
+				})
 			},
 			goBack() {
 				uni.navigateBack();
