@@ -22,7 +22,7 @@
 		</view>
 
 		<!-- 悬浮上传按钮 -->
-		<view class="floating-button" @click="chooseImage">
+		<view class="floating-button" @click="chooseImages">
 			<image src="/static/images/add-icon.png" class="floating-icon"></image>
 		</view>
 	</view>
@@ -38,6 +38,8 @@
 				cate_name: '',
 				total: 0,
 				photoGroups: [],
+				type: 3,
+				uploadedImages: [],
 			};
 		},
 		onLoad(e) {
@@ -47,71 +49,109 @@
 			this.getPhotos()
 		},
 		methods: {
-			previewImage(currentUrl,photos) {
+			previewImage(currentUrl, photos) {
 				uni.previewImage({
 					current: currentUrl, // 当前预览的图片
-					urls: photos.map(photo=>photo.url) // 图片数组
+					urls: photos.map(photo => photo.url) // 图片数组
 				})
 			},
 			getPhotos() {
 				request({
 					url: 'photo/list/' + this.cate_id,
-				}).then(res=>{
+				}).then(res => {
 					this.total = res.data.count
 					this.photoGroups = res.data
-				}).catch(err=>{
+				}).catch(err => {
 					uni.showToast({
-						title:'服务异常',
-						icon:'error'
+						title: '服务异常',
+						icon: 'error'
 					})
 				})
 			},
-			chooseImage() {
+			chooseImages() {
 				uni.chooseImage({
-					count: 1,
+					count: 9, // 允许用户一次选择多张图片，最多5张
 					success: (res) => {
-						const tempFilePath = res.tempFilePaths[0];
-						this.uploadImage(tempFilePath);
+						const tempFilePaths = res.tempFilePaths;
+						this.uploadImages(tempFilePaths); // 调用上传函数上传所有图片
 					},
 					fail: (err) => {
-						console.error('Failed to choose image:', err);
+						console.error('Failed to choose images:', err);
 					},
 				});
 			},
-			uploadImage(filePath) {
-				uni.uploadFile({
-					url: 'https://your-upload-api-url.com/upload', // 上传的API接口
-					filePath: filePath,
-					name: 'file',
-					success: (uploadFileRes) => {
-						const data = JSON.parse(uploadFileRes.data);
-						if (data.success) {
-							this.addPhotoToList(data.url);
+			uploadImages(filePaths) {
+				const promises = filePaths.map((filePath) => {
+					return new Promise((resolve, reject) => {
+						uni.uploadFile({
+							url: `${this.siteBaseUrl}upload/file?type=${this.type}`,
+							filePath: filePath,
+							name: 'file',
+							success: (uploadFileRes) => {
+								const data = JSON.parse(uploadFileRes.data);
+								if (data.code==200) {
+									this.uploadedImages.push(data.data.url); // 保存上传成功的图片 URL
+									resolve();
+								} else {
+									uni.showToast({
+										title: '上传失败',
+										icon: 'none',
+									});
+									reject(new Error('上传失败'));
+								}
+							},
+							fail: (err) => {
+								console.error('Failed to upload image:', err);
+								uni.showToast({
+									title: '上传失败',
+									icon: 'none',
+								});
+								reject(err);
+							},
+						});
+					});
+				});
+
+				// 等待所有图片上传完成后执行
+				Promise.all(promises)
+					.then(() => {
+						this.savePhotos(); // 所有图片上传成功后调用保存方法
+					})
+					.catch((err) => {
+						console.error('Error uploading images:', err);
+					});
+			},
+			savePhotos() {
+				// 提交保存图片的接口
+				request({
+						url: 'photo/save_photos',
+						method: 'POST',
+						data: {
+							cate_id: this.cate_id, // 当前的分类 ID
+							uid: uni.getStorageSync('user_info').id, // 用户 ID
+							photos: this.uploadedImages, // 上传成功的图片 URL 列表
+						},
+					}).then((res) => {
+						if (res.code == 200) {
 							uni.showToast({
-								title: '上传成功',
+								title: '保存成功',
 								icon: 'success',
 							});
+							this.getPhotos(); // 重新获取图片列表
 						} else {
 							uni.showToast({
-								title: '上传失败',
+								title: '保存失败',
 								icon: 'none',
 							});
 						}
-					},
-					fail: (err) => {
-						console.error('Failed to upload image:', err);
+					})
+					.catch((err) => {
+						console.log(err);
 						uni.showToast({
-							title: '上传失败',
-							icon: 'none',
+							title: '服务异常',
+							icon: 'error',
 						});
-					},
-				});
-			},
-			addPhotoToList(url) {
-				// 你可以在这里将上传成功的照片添加到相册列表中
-				this.photoGroups[0].photos.push({
-					url: url
-				});
+					});
 			},
 		},
 	};
@@ -178,6 +218,54 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+
+	.popup-container {
+		padding: 20px;
+	}
+
+	.image-grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+	}
+
+	.image-preview {
+		width: 50%;
+		margin-bottom: 10px;
+	}
+
+	.image-thumbnail {
+		width: 100%;
+		height: 100px;
+		border-radius: 10px;
+		object-fit: cover;
+		border: 2px solid #ddd;
+	}
+
+	.button-container {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 20px;
+	}
+
+	.confirm-button,
+	.cancel-button {
+		width: 45%;
+		padding: 10px;
+		border-radius: 5px;
+		font-size: 16px;
+		text-align: center;
+	}
+
+	.confirm-button {
+		background-color: #ff4081;
+		color: white;
+	}
+
+	.cancel-button {
+		background-color: #999;
+		color: white;
 	}
 
 	.floating-button {
