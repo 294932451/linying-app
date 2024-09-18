@@ -75,7 +75,7 @@
 	.album-grid {
 	  display: flex;
 	  flex-wrap: wrap;
-	  gap: 15px;
+	  gap: 30px;
 	  justify-content: space-between;
 	}
 	

@@ -1,5 +1,5 @@
 {
-    "name" : "lingying-app-v2",
+    "name" : "our story",
     "appid" : "__UNI__293832A",
     "description" : "",
     "versionName" : "1.0.0",
@@ -16,7 +16,10 @@
             "autoclose" : true,
             "delay" : 0
         },
-        "modules" : {},
+        "modules" : {
+            "Camera" : {},
+            "VideoPlayer" : {}
+        },
         /* 模块配置 */
         "distribute" : {
             /* 应用发布信息 */
@@ -42,7 +45,15 @@
             },
             "ios" : {},
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {},
+            "icons" : {
+                "android" : {
+                    "hdpi" : "F:/edg download/star_72x72.png",
+                    "xxhdpi" : "F:/edg download/star_144x144.png",
+                    "xxxhdpi" : "F:/edg download/star_192x192.png",
+                    "xhdpi" : "F:/edg download/star_96x96.png"
+                }
+            }
         }
     },
     /* SDK配置 */

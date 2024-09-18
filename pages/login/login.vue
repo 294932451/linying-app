@@ -72,11 +72,10 @@
 						title: res.msg,
 						icon: 'success'
 					});
-					setTimeout(function(){
 						uni.switchTab({
 							url:'/pages/index/index'
 						})
-					},2000)
+					
 				} else {
 					uni.showToast({
 						title: res.msg,

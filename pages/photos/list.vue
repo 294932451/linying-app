@@ -23,7 +23,8 @@
 
 		<!-- 悬浮上传按钮 -->
 		<view class="floating-button" @click="chooseImages">
-			<image src="/static/images/add-icon.png" class="floating-icon"></image>
+			<u-icon name="photo" size="80" color="#fff"></u-icon>
+
 		</view>
 	</view>
 </template>
@@ -207,66 +208,14 @@
 	}
 
 	.photo-item {
-		width: 48%;
+		width: 45%;
 		aspect-ratio: 1;
 		overflow: hidden;
 		border-radius: 10px;
 		background-color: #e0e0e0;
 	}
 
-	.photo-thumbnail {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
 
-	.popup-container {
-		padding: 20px;
-	}
-
-	.image-grid {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
-	}
-
-	.image-preview {
-		width: 50%;
-		margin-bottom: 10px;
-	}
-
-	.image-thumbnail {
-		width: 100%;
-		height: 100px;
-		border-radius: 10px;
-		object-fit: cover;
-		border: 2px solid #ddd;
-	}
-
-	.button-container {
-		display: flex;
-		justify-content: space-between;
-		margin-top: 20px;
-	}
-
-	.confirm-button,
-	.cancel-button {
-		width: 45%;
-		padding: 10px;
-		border-radius: 5px;
-		font-size: 16px;
-		text-align: center;
-	}
-
-	.confirm-button {
-		background-color: #ff4081;
-		color: white;
-	}
-
-	.cancel-button {
-		background-color: #999;
-		color: white;
-	}
 
 	.floating-button {
 		position: fixed;
