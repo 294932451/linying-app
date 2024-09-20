@@ -23,7 +23,6 @@ const request = (options) => {
 			data: options.data || {},
 			header: headers,
 			success: (res) => {
-				console.log('----',res);
 				if (res.data.code === 401) {
 					// 如果服务器返回 401，说明 Token 过期
 					refreshToken().then(newToken => {

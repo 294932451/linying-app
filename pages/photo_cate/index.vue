@@ -1,7 +1,7 @@
 <template>
   <view class="album-list-container">
     <view class="header">
-      <text class="title">甜蜜相册</text>
+      <text class="title">{{$t('photo_cate.albums_cate')}}</text>
     </view>
     <view class="album-grid">
       <view 
@@ -28,6 +28,7 @@
 	    };
 	  },
 	  onLoad() {
+// this.$i18n.locale = uni.getStorageInfoSync('lang');
 	  	this.get_cate()
 	  },
 	  methods: {
@@ -75,7 +76,7 @@
 	.album-grid {
 	  display: flex;
 	  flex-wrap: wrap;
-	  gap: 30px;
+	  gap:40px 0px;
 	  justify-content: space-between;
 	}
 	

@@ -1,8 +1,8 @@
 <template>
 	<div class="article-list-container">
 		<div class="header">
-			<h1>甜蜜时刻记录</h1>
-			<p>分享我们的爱情故事</p>
+			<h1>{{$t('article_list.header')}}</h1>
+			<p>{{$t('article_list.header_1')}}</p>
 		</div>
 		<ul class="article-list">
 			<li v-for="(article, index) in paginatedArticles" :key="index" class="article-item"
@@ -22,13 +22,13 @@
 			<uni-icons type="plus" size="80" color="#fff"></uni-icons> <!-- 图标可以用 font-awesome 或者其他图标库 -->
 		</button>
 		<div class="pagination">
-			<button @click="prevPage" :disabled="currentPage === 1">上一页</button>
+			<button @click="prevPage" :disabled="currentPage === 1">{{$t('article_list.page_up')}}</button>
 			<span>{{ currentPage }} / {{ totalPages }}</span>
-			<button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
+			<button @click="nextPage" :disabled="currentPage === totalPages">{{$t('article_list.page_down')}}</button>
 		</div>
 		<div class="footer">
 			<div class="footer-decoration"></div>
-			<p>愿你们的每一天都如今天般甜蜜</p>
+			<p>{{$t('article_list.foot')}}</p>
 		</div>
 	</div>
 </template>
@@ -50,6 +50,7 @@
 			}
 		},
 		onLoad() {
+			// this.$i18n.locale = uni.getStorageInfoSync('lang');
 			this.getData()
 		},
 		computed: {

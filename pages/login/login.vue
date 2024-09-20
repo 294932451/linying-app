@@ -4,10 +4,22 @@
 			<div class="cartoon-couple"></div>
 			<div class="top-decoration"></div>
 		</div>
+		
 		<div class="login-form">
+			<!-- 合并的语言切换按钮 -->
+			<div class="language-switch">
+				<button @click="toggleLanguageMenu" class="language-button">
+					{{currentLanguageLabel}}
+				</button>
+				<ul v-if="showLanguageMenu" class="language-menu">
+					<li @click="changeLanguage('en')">English</li>
+					<li @click="changeLanguage('zh')">中文</li>
+				</ul>
+			</div>
 			<div class="form-header">
 				<p>{{$t('login.title')}}</p>
 			</div>
+		
 			<div class="avatar-selection">
 				<div class="avatar" v-for="(avatar, index) in defaultAvatar" :key="index">
 					<img :src="avatar" alt="avatar" />
@@ -43,66 +55,127 @@
 					"http://39.98.115.211:8787/app/admin/upload/img/20240912/66e2b6609949.jpg",
 					"http://39.98.115.211:8787/app/admin/upload/img/20240912/66e2b6577353.jpg",
 				],
+				showLanguageMenu: false,
+				currentLanguageLabel: 'English', // 默认展示的语言
 			};
 		},
-		methods: {
-		login() {
-			request({
-				url: 'login/login',
-				method: 'POST',
-				data: {
-					username: this.username,
-					password: this.password
-				},
-			}).then(res => {
-				if (res.code == 200) {
-					// 登录成功，将 token、refreshToken 和 userinfo 保存到本地存储
-					const {
-						accessToken,
-						refreshToken,
-						userInfo
-					} = res.data;
-					// 存储 accessToken
-					uni.setStorageSync('access_token', accessToken);
-					// 存储 refreshToken
-					uni.setStorageSync('refresh_token', refreshToken);
-					// 存储用户信息
-					uni.setStorageSync('user_info', userInfo);
-					uni.showToast({
-						title: res.msg,
-						icon: 'success'
-					});
-						uni.switchTab({
-							url:'/pages/index/index'
-						})
-					
-				} else {
-					uni.showToast({
-						title: res.msg,
-						icon: 'success'
-					})
-				}
-				console.log(res);
-			}).catch(err => {
-				console.log(err);
-				uni.showToast({
-					title: '登录失败，请重试',
-					icon: 'none'
-				});
-			})
+		onLoad() {
+
 		},
+		methods: {
+			toggleLanguageMenu() {
+				this.showLanguageMenu = !this.showLanguageMenu;
+			},
+			changeLanguage(lang) {
+				this.$i18n.locale = lang;
+				this.currentLanguageLabel = lang === 'zh' ? '中文' : 'English';
+				uni.setStorageSync('lang', lang);
+				this.showLanguageMenu = false; // 切换语言后关闭菜单
+
+			},
+			login() {
+				request({
+					url: 'login/login',
+					method: 'POST',
+					data: {
+						username: this.username,
+						password: this.password
+					},
+				}).then(res => {
+					if (res.code == 200) {
+						// 登录成功，将 token、refreshToken 和 userinfo 保存到本地存储
+						const {
+							accessToken,
+							refreshToken,
+							userInfo
+						} = res.data;
+						// 存储 accessToken
+						uni.setStorageSync('access_token', accessToken);
+						// 存储 refreshToken
+						uni.setStorageSync('refresh_token', refreshToken);
+						// 存储用户信息
+						uni.setStorageSync('user_info', userInfo);
+						uni.showToast({
+							title: res.msg,
+							icon: 'success'
+						});
+						uni.switchTab({
+							url: '/pages/index/index'
+						})
+
+					} else {
+						uni.showToast({
+							title: res.msg,
+							icon: 'success'
+						})
+					}
+					console.log(res);
+				}).catch(err => {
+					console.log(err);
+					uni.showToast({
+						title: '登录失败，请重试',
+						icon: 'none'
+					});
+				})
+			},
 		},
 	};
 </script>
 
 <style scoped>
+	.language-switch {
+			position: relative;
+			margin-bottom: 20px;
+			display: flex;
+			justify-content: center;
+		}
+	
+		.language-button {
+			background-color: #ff6f91;
+			color: white;
+			border: none;
+			border-radius: 20px;
+			cursor: pointer;
+			font-size: 15px;
+			box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+			transition: transform 0.2s, background-color 0.2s;
+		}
+	
+		.language-button:hover {
+			transform: scale(1.05);
+		}
+	
+		.language-menu {
+			position: absolute;
+			top: 50px;
+			background-color: white;
+			border-radius: 10px;
+			box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+			list-style: none;
+			padding: 10px 0;
+			width: 100px;
+			text-align: center;
+		}
+	
+		.language-menu li {
+			padding: 10px;
+			cursor: pointer;
+			color: #ff6f91;
+			transition: background-color 0.2s;
+		}
+	
+		.language-menu li:hover {
+			background-color: #ff6f91;
+			color: white;
+		}
 	.login-container {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		height: 100vh;
 		background-image: url('/static/images/login-bg-1.png');
-		 background-size: contain; /* 确保图片完整显示 */
+		background-size: contain;
+		/* 确保图片完整显示 */
 		/* 确保路径正确 */
 		position: relative;
 		padding: 20px;

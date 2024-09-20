@@ -19,9 +19,29 @@ export default {
 		seconds:'秒',
 	    play:'播放',
 		pause:'暂停',
+		logout:'退出'
+	},
+	photo_cate: {
+		albums_cate:'时光记忆'
+	},
+	article_list: {
+		header:'甜蜜时刻记录',
+		header_1:'记录我们的点点滴滴',
+		foot:'将文字汇聚成思念的河',
+		page_up:'上一页',
+		page_down:'下一页'
+	},
+	article_write: {
+		write:'写日记',
+		title:'请输入标题',
+		content:'记录详细内容吧，将成为珍贵的回忆喔~',
+		upload1:'上传',
+		upload:'点击此处上传',
+		done:'完成'
 	},
 	tabbar: {
 		index:'首页',
 		us:'我们',
-	}
+	},
+	
 }

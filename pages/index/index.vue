@@ -6,10 +6,15 @@
 		<view class="floating-audio-btn" @tap="playAudio">
 			<text>{{ isPlaying  ? $t('index.pause') : $t('index.play') }}</text>
 		</view>
+		<!-- 添加音频播放器 -->
+		<view class="logout-btn" @tap="logout()">
+			<text>{{$t('index.logout')}}</text>
+		</view>
 		<view class="content-wrap">
 			<view class="bg-wrap">
 				<u-swiper :list="banner" height="200px"></u-swiper>
 			</view>
+		
 			<view class="content-text">
 				<uni-title type="h2" :title="$t('index.together')" align="center" style="color: #fff;"></uni-title>
 			</view>
@@ -135,6 +140,7 @@
 			},
 		},
 		onLoad() {
+			// this.$i18n.locale = uni.getStorageInfoSync('lang');
 			// 初始化音频上下文
 			this.audioContext = uni.createInnerAudioContext();
 			this.audioContext.src = this.videoSrc; // 替换成你的音频文件地址
@@ -157,6 +163,20 @@
 			clearInterval(this.timer);
 		},
 		methods: {
+			logout() {
+			try {
+				uni.clearStorageSync();
+				uni.redirectTo({
+					url:'/pages/login/login'
+				})
+			} catch (e) {
+				// error
+				uni.showToast({
+					title:'失败',
+					icon:'error'
+				})
+			}
+			},
 			// 控制音频播放和暂停
 			playAudio() {
 				if (this.isPlaying) {
@@ -237,7 +257,7 @@
 	.floating-audio-btn {
 		position: fixed;
 		/* 固定定位 */
-		top: 380px;
+		top: 280px;
 		/* 距离页面底部20px */
 		right: 10px;
 		/* 距离页面右侧20px */
@@ -247,7 +267,7 @@
 		/* 按钮高度 */
 		/* background-color: #007aff; */
 		/* 按钮背景颜色 */
-		color: #fff;
+		color: rgba(0, 0, 0, 0.5);
 		/* 字体颜色 */
 		display: flex;
 		align-items: center;
@@ -255,6 +275,28 @@
 		border-radius: 50%;
 		/* 圆形按钮 */
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+		/* 阴影效果 */
+		z-index: 1;
+		/* 确保在页面内容的上层 */
+		font-size: 18px;
+	}
+	/* 悬浮按钮样式 */
+	.logout-btn {
+		position: fixed;
+		/* 固定定位 */
+		top: 280px;
+		/* 距离页面底部20px */
+		/* 距离页面右侧20px */
+		width: 60px;
+		/* 按钮宽度 */
+		height: 60px;
+		color: #ffffff;
+		/* 字体颜色 */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		/* 圆形按钮 */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		/* 阴影效果 */
 		z-index: 1;
 		/* 确保在页面内容的上层 */

@@ -1,21 +1,21 @@
 <template>
 	<div class="diary-page-container">
 		<header class="diary-header">
-			<h1 class="title-center">写日记</h1>
+			<h1 class="title-center">{{$t('article_write.write')}}</h1>
 		</header>
 		<div class="diary-content">
-			<input type="text" class="title-input" placeholder="请输入标题" v-model="title" />
-			<textarea class="content-textarea" placeholder="记录详细内容吧，将成为珍贵的回忆喔~" v-model="content"></textarea>
+			<input type="text" class="title-input" :placeholder="$t('article_write.title')" v-model="title" />
+			<textarea class="content-textarea" :placeholder="$t('article_write.content')" v-model="content"></textarea>
 			<div class="image-upload">
-				<uni-section title="上传" type="line">
+				<uni-section :title="$t('article_write.upload1')" type="line">
 					<view class="example-body">
 						<uni-file-picker v-model="localImages" fileMediatype="image" mode="grid" @select="select"
-							limit="9" title="点击此处上传" :image-styles="imageStyles"></uni-file-picker>
+							limit="9" :title="$t('article_write.upload')" :image-styles="imageStyles"></uni-file-picker>
 					</view>
 				</uni-section>
 			</div>
 		</div>
-		<button class="complete-button" @click="submitForm">完成</button>
+		<button class="complete-button" @click="submitForm">{{$t('article_write.done')}}</button>
 	</div>
 </template>
 
@@ -38,6 +38,9 @@
 				selectedImages: [],
 				type: 2
 			};
+		},
+		onLoad() {
+			// this.$i18n.locale = uni.getStorageInfoSync('lang');
 		},
 		methods: {
 			select(e) {
