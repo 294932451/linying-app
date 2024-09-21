@@ -60,6 +60,7 @@
 				request({
 					url: 'my/index',
 				}).then(res=>{
+					console.log('res++++',res);
 					this.events = res.data
 				}).catch(err=>{
 					uni.showToast({

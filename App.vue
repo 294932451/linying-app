@@ -49,7 +49,7 @@ function downloadWgt(wgtUrl) {
 function installWgt(path) {
     plus.runtime.install(path, {}, function () {
         uni.request({
-        	url:'http://39.98.115.211:8787/api/login/update_app',
+        	url:'http://39.98.115.211:8787/api/login/update_new',
 			success: (res) => {
 				if(res.data.code === 200) {
 					plus.nativeUI.alert('新版本更新完成咯~', function() {
@@ -57,7 +57,7 @@ function installWgt(path) {
 					});
 				}else{
 					plus.nativeUI.alert('更新异常', function() {
-					    plus.runtime.restart(); // 安装成功后重启应用
+					   console.log('更新异常');
 					});
 				}
 			}

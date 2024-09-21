@@ -59,7 +59,7 @@ const refreshToken = () => {
 
 		// 调用刷新 Token API
 		uni.request({
-			url: baseURL + '/login/refresh_token',
+			url: baseURL + 'login/refresh_token',
 			method: 'POST',
 			data: {
 				refresh_token: refreshToken

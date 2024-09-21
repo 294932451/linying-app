@@ -30,7 +30,7 @@
 		<view class="content-calendar">
 			<!-- 插入模式 -->
 			<uni-calendar lunar class="uni-calendar--hook" :selected="info.selected" :showMonth="true" @change="change"
-				@monthSwitch="monthSwitch" />
+				@monthSwitch="monthSwitch" :range="info.range" />
 		</view>
 
 		<view class="content-card">
@@ -114,7 +114,7 @@
 				showCalendar: false,
 				info: {
 					lunar: true,
-					range: true,
+					range: false,
 					insert: false,
 					selected: []
 				},
@@ -190,8 +190,10 @@
 				request({
 					url: 'index',
 				}).then(res => {
+					console.log('11111',res);
 					this.xingzuo_notice = res.data.xing_zuo
 					this.info.selected = res.data.rili
+					this.info.range = res.data.jingqi_range
 				}).catch(err => {
 					uni.showToast({
 						title: '服务异常',
@@ -225,7 +227,7 @@
 			},
 			change(e) {
 				console.log('change 返回:', e)
-				if (Object.keys(e.extraInfo).length) {
+				if (Object.keys(e.extraInfo).length && e.extraInfo.data.has_data) {
 					this.showVideoPage = true; // 点击日期后显示视频页面
 				}
 			},

@@ -11,7 +11,7 @@
 
 			<div class="diary-section">
 				<div class="diary-label">内容</div>
-				<div class="diary-text">{{ content }}</div>
+				<div class="diary-text" v-html="content" ></div>
 			</div>
 			<div class="diary-section">
 				<div class="diary-label">时间</div>
