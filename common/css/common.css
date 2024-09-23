@@ -1,0 +1,6 @@
+/* common.css 或 global.css */
+.container {
+  background: url('../../static/images/pink-bg.png') no-repeat center center;
+  background-size: cover; /* 确保背景图可以覆盖整个页面 */
+  min-height: 100vh;
+}

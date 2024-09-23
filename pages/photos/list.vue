@@ -1,5 +1,5 @@
 <template>
-	<view class="album-detail-container">
+	<view class="container">
 		<!-- 顶部大图和标题 -->
 		<view class="header">
 			<image style="width: 100%; height: 300px; " :src="cover" mode="aspectFill"></image>
@@ -159,9 +159,6 @@
 </script>
 
 <style scoped>
-	.album-detail-container {
-		background-color: #f5f5f5;
-	}
 
 	.header {
 		position: relative;

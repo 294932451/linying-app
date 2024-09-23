@@ -7,8 +7,11 @@ import VueI18n from 'vue-i18n'
 import zh from 'static/lang/zh.js'
 import en from 'static/lang/en.js'
 import store from './common/store'
+import './common/css/common.css'  // 假设你的 common.css 放在根目录
 Vue.use(uView)
 Vue.use(VueI18n)
+// 引入全局样式
+
 
 // 调用setConfig方法，方法内部会进行对象属性深度合并，可以放心嵌套配置
 // 需要在Vue.use(uView)之后执行

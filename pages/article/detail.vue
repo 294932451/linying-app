@@ -1,34 +1,34 @@
 <template>
-	<div class="diary-view-container">
+	<view class="container">
 		<header class="diary-header">
 			<h1 class="title-center">查看日记</h1>
 		</header>
-		<div class="diary-content">
-			<div class="diary-section">
-				<div class="diary-label">标题</div>
-				<div class="diary-title">{{ title }}</div>
-			</div>
+		<view class="diary-content">
+			<view class="diary-section">
+				<view class="diary-label">标题</view>
+				<view class="diary-title">{{ title }}</view>
+			</view>
 
-			<div class="diary-section">
-				<div class="diary-label">内容</div>
-				<div class="diary-text" v-html="content" ></div>
-			</div>
-			<div class="diary-section">
-				<div class="diary-label">时间</div>
-				<div class="diary-text">{{ date_time }}</div>
-			</div>
+			<view class="diary-section">
+				<view class="diary-label">内容</view>
+				<view class="diary-text" v-html="content" ></view>
+			</view>
+			<view class="diary-section">
+				<view class="diary-label">时间</view>
+				<view class="diary-text">{{ date_time }}</view>
+			</view>
 
-			<div class="diary-section image-view">
-				<div class="diary-label">上传的图片</div>
-				<div class="image-preview">
-					<div v-for="(image, index) in selectedImages" :key="index" class="image-item">
+			<view class="diary-section image-view">
+				<view class="diary-label">上传的图片</view>
+				<view class="image-preview">
+					<view v-for="(image, index) in selectedImages" :key="index" class="image-item">
 						<image style="width: 200px; height: 200px; background-color: #eeeeee;" :src="image"
 							@tap="previewImage(index, selectedImages)" mode="aspectFill"></image>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
@@ -72,11 +72,10 @@
 </script>
 
 <style scoped>
-	.diary-view-container {
+	.container {
 		max-width: 600px;
 		margin: 0 auto;
 		padding: 20px;
-		background: #f9f9fc;
 		border-radius: 15px;
 		box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
 		font-family: 'Arial', sans-serif;

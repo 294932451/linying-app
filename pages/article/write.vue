@@ -1,5 +1,5 @@
 <template>
-	<div class="diary-page-container">
+	<div class="container">
 		<header class="diary-header">
 			<h1 class="title-center">{{$t('article_write.write')}}</h1>
 		</header>
@@ -100,11 +100,10 @@
 </script>
 
 <style>
-	.diary-page-container {
+	.container {
 		max-width: 600px;
 		margin: 0 auto;
 		padding: 20px;
-		background: #f9f9fc;
 		border-radius: 15px;
 		box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
 		font-family: 'Arial', sans-serif;

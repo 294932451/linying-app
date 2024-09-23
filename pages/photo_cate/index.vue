@@ -1,5 +1,5 @@
 <template>
-  <view class="album-list-container">
+  <view class="container">
     <view class="header">
       <text class="title">{{$t('photo_cate.albums_cate')}}</text>
     </view>
@@ -56,9 +56,8 @@
 </script>
 
 <style>
-	.album-list-container {
+	.container {
 	  padding: 20px;
-	  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
 	  min-height: 100vh;
 	}
 	

@@ -1,5 +1,5 @@
 <template>
-	<div class="article-list-container">
+	<div class="container">
 		<div class="header">
 			<h1>{{$t('article_list.header')}}</h1>
 			<p>{{$t('article_list.header_1')}}</p>
@@ -94,11 +94,10 @@
 </script>
 
 <style>
-	.article-list-container {
+	.container {
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 20px;
-		background: #fff;
 		border-radius: 10px;
 		box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
 		font-family: 'Arial', sans-serif;

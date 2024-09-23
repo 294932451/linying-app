@@ -14,18 +14,20 @@
 			<view class="bg-wrap">
 				<u-swiper :list="banner" height="200px"></u-swiper>
 			</view>
-		
+
 			<view class="content-text">
 				<uni-title type="h2" :title="$t('index.together')" align="center" style="color: #fff;"></uni-title>
 			</view>
 			<view class="content-time">
 				<p class="time-text">{{ days }} {{$t('index.days')}} {{ hours }} {{$t('index.hours')}} {{ minutes }}
-					{{$t('index.minutes')}} {{ seconds }} {{$t('index.seconds')}}</p>
+					{{$t('index.minutes')}} {{ seconds }} {{$t('index.seconds')}}
+				</p>
 			</view>
 		</view>
 		<u-divider text=""></u-divider>
 		<view class="content-notice">
-			<u-notice-bar :text="xingzuo_notice" class="notice-bar" :speed="30" :fontSize="30"></u-notice-bar>
+			<u-notice-bar :text="xingzuo_notice" class="notice-bar" :speed="30" :fontSize="30"
+				@click="handleClick('/pages/index/xingzuo')"></u-notice-bar>
 		</view>
 		<view class="content-calendar">
 			<!-- 插入模式 -->
@@ -118,7 +120,7 @@
 					insert: false,
 					selected: []
 				},
-				startTime: new Date('2024-06-14T00:00:00').getTime(), // 开始计时的时间，可以修改为你需要的时间
+				startTime: new Date('2024-06-14T14:15:00').getTime(), // 开始计时的时间，可以修改为你需要的时间
 				currentTime: 0,
 				timer: null,
 				showVideoPage: false, // 控制视频页面显示/隐藏
@@ -164,18 +166,18 @@
 		},
 		methods: {
 			logout() {
-			try {
-				uni.clearStorageSync();
-				uni.redirectTo({
-					url:'/pages/login/login'
-				})
-			} catch (e) {
-				// error
-				uni.showToast({
-					title:'失败',
-					icon:'error'
-				})
-			}
+				try {
+					uni.clearStorageSync();
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+				} catch (e) {
+					// error
+					uni.showToast({
+						title: '失败',
+						icon: 'error'
+					})
+				}
 			},
 			// 控制音频播放和暂停
 			playAudio() {
@@ -190,7 +192,6 @@
 				request({
 					url: 'index',
 				}).then(res => {
-					console.log('11111',res);
 					this.xingzuo_notice = res.data.xing_zuo
 					this.info.selected = res.data.rili
 					this.info.range = res.data.jingqi_range
@@ -216,8 +217,15 @@
 			},
 
 
-			handleClick(url) {
-				goToPage(url);
+			handleClick(url,prams) {
+				if(prams){
+					 const data = { prams }; // 创建传递的 data 对象
+					 	goToPage(url,data);
+				}else{
+						goToPage(url);
+				}
+				
+			
 			},
 			open() {
 				this.$refs.calendar.open()
@@ -282,6 +290,7 @@
 		/* 确保在页面内容的上层 */
 		font-size: 18px;
 	}
+
 	/* 悬浮按钮样式 */
 	.logout-btn {
 		position: fixed;
@@ -402,10 +411,6 @@
 	/* 通用样式 */
 	.container {
 		padding: 20px 0;
-		background: url('/static/images/pink-bg.png') no-repeat center center;
-		/* 替换为你的星空背景图 */
-		background-size: cover;
-		min-height: 100vh;
 		color: #fff;
 		padding-top: 70px;
 		/* 增加顶部内边距，确保内容不被头部遮挡 */

@@ -91,20 +91,11 @@
 
 <style scoped>
 	.container {
-		background: url('/static/images/pink-bg.png') no-repeat center center;
-		/* 替换为你的星空背景图 */
-		/* 温暖的粉色背景 */
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		padding-top: 70px;
-		/* 增加顶部内边距，确保内容不被头部遮挡 */
 	}
-
-
-
-
 
 	.title {
 		font-size: 18px;

@@ -65,6 +65,13 @@
 			{
 				"navigationStyle" : ""
 			}
+		},
+		{
+			"path" : "pages/index/xingzuo",
+			"style" : 
+			{
+				"navigationStyle" : ""
+			}
 		}
 
 	],
