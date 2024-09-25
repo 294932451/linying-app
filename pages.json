@@ -83,7 +83,8 @@
 		"list": [{
 				"pagePath": "pages/index/index",
 				"text": "首页",
-				"iconPath": "static/images/tabbar/tong.jpg"
+				"iconPath": "static/images/tabbar/tong.jpg",
+				"enablePullDownRefresh":true
 				// "selectedIconPath": "static/tabbar/home-active.png"
 			},
 			// {
@@ -95,7 +96,8 @@
 			{
 				"pagePath": "pages/us/index",
 				"text": "我们",
-				"iconPath": "static/images/tabbar/lin.jpg"
+				"iconPath": "static/images/tabbar/lin.jpg",
+				"enablePullDownRefresh":true
 				// "selectedIconPath": "static/tabbar/account-active.png"
 			}
 		]

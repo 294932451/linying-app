@@ -43,6 +43,16 @@
 				'uni-calendar-item--extra':weeks.extraInfo.info=='经期',
 				'uni-calendar-item--extra1':weeks.extraInfo.data && weeks.extraInfo.data.type==1,
 				'uni-calendar-item--extra2':weeks.extraInfo.data && weeks.extraInfo.data.type==2,
+				'uni-calendar-item--extra3':weeks.extraInfo.data && weeks.extraInfo.data.type==3,
+				'uni-calendar-item--extra4':weeks.extraInfo.data && weeks.extraInfo.data.type==4,
+				'uni-calendar-item--extra5':weeks.extraInfo.data && weeks.extraInfo.data.type==5,
+				'uni-calendar-item--extra6':weeks.extraInfo.data && weeks.extraInfo.data.type==6,
+				'uni-calendar-item--extra7':weeks.extraInfo.data && weeks.extraInfo.data.type==7,
+				'uni-calendar-item--extra8':weeks.extraInfo.data && weeks.extraInfo.data.type==8,
+				'uni-calendar-item--extra9':weeks.extraInfo.data && weeks.extraInfo.data.type==9,
+				'uni-calendar-item--extra10':weeks.extraInfo.data && weeks.extraInfo.data.type==10,
+				'uni-calendar-item--extra11':weeks.extraInfo.data && weeks.extraInfo.data.type==11,
+				'uni-calendar-item--extra12':weeks.extraInfo.data && weeks.extraInfo.data.type==12,
 				'uni-calendar-item--isDay-text':weeks.isDay,
 				'uni-calendar-item--isDay':calendar.fullDate === weeks.fullDate && weeks.isDay,
 				'uni-calendar-item--checked':calendar.fullDate === weeks.fullDate && !weeks.isDay,
@@ -178,14 +188,58 @@
 		opacity: 0.8;
 	}
 	.uni-calendar-item--extra1 {
-		color: #dada00;
+		color: #ff0000;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra2 {
+		color: #ff8600;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra3 {
+		color: #ffed00;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra4 {
+		color: #68fd00;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra5 {
+		color: #00ff40;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra6 {
+		color: #00ffff;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra7 {
+		color: #0085ff;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra8 {
+		color: #0040ff;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra9 {
+		color: #2b1cff;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra10 {
+		color: #7f18ff;
+		opacity: 0.8;
+	}
+	.uni-calendar-item--extra11 {
+		color: #ff00d4;
+		opacity: 0.8;
+	}
+	
+	.uni-calendar-item--extra12 {
+		color: #ff0094;
 		opacity: 0.8;
 	}
 	.uni-calendar-item--extra2 {
 		color: #0055ff;
 		opacity: 0.8;
 	}
-
 	.uni-calendar-item--checked {
 		background-color: $uni-primary;
 		color: #fff;

@@ -1,3 +1,6 @@
+<style>
+	@import url("./common/css/common.css"); 
+</style>
 <script>
 	export default {
 		onLaunch: function() {

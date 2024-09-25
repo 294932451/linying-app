@@ -14,6 +14,10 @@
         <text class="album-title">{{ album.name }}</text>
       </view>
     </view>
+	<!-- 悬浮上传按钮 -->
+	<view class="floating-button" @tap="createPhotoCate()">
+		<uni-icons type="images" size="50" color="#fff"></uni-icons>
+	</view>
   </view>
 </template>
 
@@ -32,6 +36,31 @@
 	  	this.get_cate()
 	  },
 	  methods: {
+		  createPhotoCate() {
+			  uni.showModal({
+			  	title:'新建相册',
+				editable:true,
+				content:'',
+				placeholderText:'请输入相册名称',
+				success:function(res) {
+					request({
+						url:'photo/create_photo_cate',
+						method:'POST',
+						data:{
+							cate_name:res.content,
+							uid:uni.getStorageSync('user_info').id
+						}
+					}).then(res1=>{
+						if (res1.code == 200) {
+							uni.showToast({
+								title:res1.msg,
+								icon:'success'
+							})
+						}
+					})
+				}
+			  })
+		  },
 		  handleClick(url) {
 		       goToPage(url);
 		     },
@@ -107,6 +136,19 @@
 	  font-size: 16px;
 	  color: #ff6f91;
 	  font-weight: bold;
+	}
+	.floating-button {
+		position: fixed;
+		bottom: 30px;
+		right: 20px;
+		width: 60px;
+		height: 60px;
+		background-color: #ff4081;
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 	}
 
 </style>

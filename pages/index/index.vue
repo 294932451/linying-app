@@ -4,7 +4,7 @@
 		<Header />
 		<!-- 添加音频播放器 -->
 		<view class="floating-audio-btn" @tap="playAudio">
-			<text>{{ isPlaying  ? $t('index.pause') : $t('index.play') }}</text>
+			<text style="color: #fff;">{{ isPlaying  ? $t('index.pause') : $t('index.play') }}</text>
 		</view>
 		<!-- 添加音频播放器 -->
 		<view class="logout-btn" @tap="logout()">
@@ -124,7 +124,7 @@
 				currentTime: 0,
 				timer: null,
 				showVideoPage: false, // 控制视频页面显示/隐藏
-				videoSrc: 'https://linying01.oss-cn-beijing.aliyuncs.com/%E6%9C%89%E6%88%91%E5%91%A2.wav' // 视频链接
+				musicSrc: '' // 音频链接
 			}
 		},
 		computed: {
@@ -145,8 +145,9 @@
 			// this.$i18n.locale = uni.getStorageInfoSync('lang');
 			// 初始化音频上下文
 			this.audioContext = uni.createInnerAudioContext();
-			this.audioContext.src = this.videoSrc; // 替换成你的音频文件地址
+
 			this.audioContext.autoplay = false; // 设置为 false，用户手动控制
+			this.getMusic();
 			this.getBanner()
 			this.getIndex()
 
@@ -160,11 +161,28 @@
 		mounted() {
 			this.updateTimer();
 			this.timer = setInterval(this.updateTimer, 1000);
+
 		},
 		beforeDestroy() {
 			clearInterval(this.timer);
 		},
 		methods: {
+			 // 刷新时调用的方法
+			    refreshData() {
+			      // 这里写刷新数据的逻辑，比如重新获取音频信息、轮播图等
+			      this.getBanner(); // 重新获取轮播图
+			      this.getIndex(); // 重新获取首页数据
+			
+			      // 数据请求完成后停止刷新状态
+			      uni.stopPullDownRefresh();
+			    },
+			getMusic() {
+				request({
+					url: 'index/get_music',
+				}).then(res => {
+					this.audioContext.src =res.data; // 替换成你的音频文件地址
+				})
+			},
 			logout() {
 				try {
 					uni.clearStorageSync();
@@ -217,15 +235,17 @@
 			},
 
 
-			handleClick(url,prams) {
-				if(prams){
-					 const data = { prams }; // 创建传递的 data 对象
-					 	goToPage(url,data);
-				}else{
-						goToPage(url);
+			handleClick(url, prams) {
+				if (prams) {
+					const data = {
+						prams
+					}; // 创建传递的 data 对象
+					goToPage(url, data);
+				} else {
+					goToPage(url);
 				}
-				
-			
+
+
 			},
 			open() {
 				this.$refs.calendar.open()
@@ -253,6 +273,10 @@
 				this.showVideoPage = false; // 关闭视频页面
 			}
 		},
+		onPullDownRefresh() {
+		    // 在用户下拉动作触发时调用
+		    this.refreshData();
+		  },
 		onUnload() {
 			// 页面销毁时释放音频资源
 			if (this.audioContext) {
@@ -269,7 +293,7 @@
 		/* 固定定位 */
 		top: 280px;
 		/* 距离页面底部20px */
-		right: 10px;
+		right: 1px;
 		/* 距离页面右侧20px */
 		width: 60px;
 		/* 按钮宽度 */

@@ -173,7 +173,7 @@
 		justify-content: center;
 		align-items: center;
 		height: 100vh;
-		background-image: url('/static/images/login-bg-1.png');
+		background-image: url('http://39.98.115.211:8787/app/admin/upload/bgimgs/login-bg.png');
 		background-size: contain;
 		/* 确保图片完整显示 */
 		/* 确保路径正确 */

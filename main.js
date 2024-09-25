@@ -7,7 +7,7 @@ import VueI18n from 'vue-i18n'
 import zh from 'static/lang/zh.js'
 import en from 'static/lang/en.js'
 import store from './common/store'
-import './common/css/common.css'  // 假设你的 common.css 放在根目录
+
 Vue.use(uView)
 Vue.use(VueI18n)
 // 引入全局样式

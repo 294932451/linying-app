@@ -55,6 +55,12 @@
 			this.getImages()
 		},
 		methods: {
+			refreshData() {
+			  this.getIndex(); // 重新获取首页数据
+						this.getImages()
+			  // 数据请求完成后停止刷新状态
+			  uni.stopPullDownRefresh();
+			},
 			//获取下面列表
 			getIndex() {
 				request({
@@ -85,7 +91,11 @@
 			goBack() {
 				uni.navigateBack();
 			}
-		}
+		},
+		onPullDownRefresh() {
+		    // 在用户下拉动作触发时调用
+		    this.refreshData();
+		  }
 	};
 </script>
 

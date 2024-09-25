@@ -23,8 +23,7 @@
 
 		<!-- 悬浮上传按钮 -->
 		<view class="floating-button" @click="chooseImages">
-			<u-icon name="photo" size="80" color="#fff"></u-icon>
-
+			<uni-icons type="upload" size="50" color="#fff"></uni-icons>
 		</view>
 	</view>
 </template>
@@ -228,8 +227,4 @@
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 	}
 
-	.floating-icon {
-		width: 30px;
-		height: 30px;
-	}
 </style>
