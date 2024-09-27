@@ -4,7 +4,7 @@ export default {
 		title_right: 'Like This World, But Like You Even More'
 	},
 	login: {
-		title: 'The Story of Lin Ying and Me',
+		title: 'Turn the story into us',
 		username: 'Username',
 		password: 'Password',
 		login: 'Login',

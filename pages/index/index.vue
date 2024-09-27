@@ -31,7 +31,7 @@
 		</view>
 		<view class="content-calendar">
 			<!-- 插入模式 -->
-			<uni-calendar lunar class="uni-calendar--hook" :selected="info.selected" :showMonth="true" @change="change"
+			<uni-calendar :lunar="info.lunar" class="uni-calendar--hook" :selected="info.selected"  @change="change"
 				@monthSwitch="monthSwitch" :range="info.range" />
 		</view>
 
@@ -255,8 +255,19 @@
 			},
 			change(e) {
 				console.log('change 返回:', e)
-				if (Object.keys(e.extraInfo).length && e.extraInfo.data.has_data) {
-					this.showVideoPage = true; // 点击日期后显示视频页面
+				if (Object.keys(e.extraInfo).length && e.extraInfo.data.has_data==1) {
+					uni.showToast({
+						title:e.extraInfo.data.data_info,
+						icon:'none',
+						duration: 2000
+						
+					})
+					 // uni.showModal({
+					 // 	title:e.extraInfo.info,
+						// content:e.extraInfo.data.data_info,
+						// showCancel:false,
+						// confirmText:'知道啦'
+					 // })
 				}
 			},
 			confirm(e) {
@@ -435,7 +446,6 @@
 	/* 通用样式 */
 	.container {
 		padding: 20px 0;
-		color: #fff;
 		padding-top: 70px;
 		/* 增加顶部内边距，确保内容不被头部遮挡 */
 	}
