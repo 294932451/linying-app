@@ -32,7 +32,6 @@
 	    };
 	  },
 	  onLoad() {
-// this.$i18n.locale = uni.getStorageInfoSync('lang');
 	  	this.get_cate()
 	  },
 	  methods: {
@@ -86,17 +85,17 @@
 
 <style>
 	.container {
-	  padding: 20px;
+	  padding: 0px 10px 0px 10px;
 	  min-height: 100vh;
 	}
 	
 	.header {
 	  text-align: center;
-	  margin-bottom: 20px;
+	  margin-bottom: 10px;
 	}
 	
 	.title {
-	  font-size: 24px;
+	  font-size: 18px;
 	  color: #fff;
 	  font-weight: bold;
 	}
@@ -104,7 +103,7 @@
 	.album-grid {
 	  display: flex;
 	  flex-wrap: wrap;
-	  gap:40px 0px;
+	  gap:20px 0px;
 	  justify-content: space-between;
 	}
 	
@@ -114,7 +113,7 @@
 	  border-radius: 15px;
 	  overflow: hidden;
 	  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-	  transition: transform 0.2s;
+	  /* transition: transform 0.2s; */
 	  text-align: center;
 	}
 	
@@ -133,7 +132,7 @@
 	
 	.album-title {
 	  padding: 10px;
-	  font-size: 16px;
+	  font-size: 12px;
 	  color: #ff6f91;
 	  font-weight: bold;
 	}

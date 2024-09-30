@@ -98,14 +98,13 @@
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 20px;
-		border-radius: 10px;
 		box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
 		font-family: 'Arial', sans-serif;
 		position: relative;
 		min-height: 100vh;
 		/* 确保页面填满整个视口 */
 		display: flex;
-		flex-direction: column;
+		flex-direction: column
 	}
 
 	.header {
@@ -113,12 +112,12 @@
 	}
 
 	.header h1 {
-		font-size: 28px;
+		font-size: 20px;
 		color: #ff6f91;
 	}
 
 	.header p {
-		font-size: 16px;
+		font-size: 12px;
 		color: #666;
 	}
 
@@ -132,9 +131,7 @@
 
 	.article-item {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 15px 20px;
+		padding: 15px;
 		margin-bottom: 15px;
 		border-radius: 10px;
 		background: linear-gradient(135deg, #ff9a9e, #fad0c4);
@@ -161,24 +158,19 @@
 		margin-top: 10px;
 	}
 
-	.article-icon i {
-		font-size: 18px;
-		color: #ff6f91;
-	}
 
 	.pagination {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		margin: 20px 0;
-		height: 30px;
+		height: 20px;
 	}
 
 	.pagination button {
 		background-color: #ff6f91;
 		color: white;
 		border: none;
-		padding: 10px 20px;
 		border-radius: 5px;
 		cursor: pointer;
 		margin: 0 10px;

@@ -2,7 +2,7 @@
 	<view class="container">
 		<!-- 顶部大图和标题 -->
 		<view class="header">
-			<image style="width: 100%; height: 300px; " :src="cover" mode="aspectFill"></image>
+			<image style="width: 100%; max-height: 300px; " :src="cover" mode="aspectFill"></image>
 			<!-- <image class="header-image" :src="cover"></image> -->
 			<view class="header-content">
 				<text class="album-title">{{cate_name}}</text>
@@ -158,7 +158,6 @@
 </script>
 
 <style scoped>
-
 	.header {
 		position: relative;
 	}
@@ -177,22 +176,22 @@
 	}
 
 	.album-title {
-		font-size: 24px;
+		font-size: 18px;
 		font-weight: bold;
 		margin-right: 10px;
 	}
 
 	.photo-count {
-		font-size: 16px;
+		font-size: 12px;
 		margin-top: 5px;
 	}
 
 	.photo-group {
-		padding: 10px 20px;
+		padding: 0px 10px 10px 10px;
 	}
 
 	.photo-date {
-		font-size: 18px;
+		font-size: 16px;
 		font-weight: bold;
 		margin-bottom: 10px;
 	}
@@ -200,7 +199,8 @@
 	.photo-grid {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 20px;
+		gap: 10px 20px;
+		justify-content: space-between;
 	}
 
 	.photo-item {

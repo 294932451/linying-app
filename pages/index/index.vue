@@ -16,7 +16,7 @@
 			</view>
 
 			<view class="content-text">
-				<uni-title type="h2" :title="$t('index.together')" align="center" style="color: #fff;"></uni-title>
+				<uni-title type="h2" :title="$t('index.together')" align="center" :color="currentColor"></uni-title>
 			</view>
 			<view class="content-time">
 				<p class="time-text">{{ days }} {{$t('index.days')}} {{ hours }} {{$t('index.hours')}} {{ minutes }}
@@ -31,7 +31,7 @@
 		</view>
 		<view class="content-calendar">
 			<!-- 插入模式 -->
-			<uni-calendar :lunar="info.lunar" class="uni-calendar--hook" :selected="info.selected"  @change="change"
+			<uni-calendar :lunar="info.lunar" class="uni-calendar--hook" :selected="info.selected" @change="change"
 				@monthSwitch="monthSwitch" :range="info.range" />
 		</view>
 
@@ -109,6 +109,8 @@
 		},
 		data() {
 			return {
+				currentColor: 'rgb(255, 255, 255)', // 初始颜色
+				hue: 0, // 用于调节颜色的色相
 				audioContext: null, // 音频上下文
 				isPlaying: false, // 音频是否在播放
 				banner: [],
@@ -160,27 +162,33 @@
 		},
 		mounted() {
 			this.updateTimer();
-			this.timer = setInterval(this.updateTimer, 1000);
+			this.timer = setInterval(() => {
+				this.hue = (this.hue + 1) % 360; // 每次增加色相
+				this.currentColor = `hsl(${this.hue}, 100%, 50%)`; // 生成 HSL 颜色
+
+				// 更新其他定时器逻辑，比如计时器
+				this.updateTimer();
+			}, 1000); // 每1秒切换颜色和更新计时器
 
 		},
 		beforeDestroy() {
 			clearInterval(this.timer);
 		},
 		methods: {
-			 // 刷新时调用的方法
-			    refreshData() {
-			      // 这里写刷新数据的逻辑，比如重新获取音频信息、轮播图等
-			      this.getBanner(); // 重新获取轮播图
-			      this.getIndex(); // 重新获取首页数据
-			
-			      // 数据请求完成后停止刷新状态
-			      uni.stopPullDownRefresh();
-			    },
+			// 刷新时调用的方法
+			refreshData() {
+				// 这里写刷新数据的逻辑，比如重新获取音频信息、轮播图等
+				this.getBanner(); // 重新获取轮播图
+				this.getIndex(); // 重新获取首页数据
+
+				// 数据请求完成后停止刷新状态
+				uni.stopPullDownRefresh();
+			},
 			getMusic() {
 				request({
 					url: 'index/get_music',
 				}).then(res => {
-					this.audioContext.src =res.data; // 替换成你的音频文件地址
+					this.audioContext.src = res.data; // 替换成你的音频文件地址
 				})
 			},
 			logout() {
@@ -255,19 +263,26 @@
 			},
 			change(e) {
 				console.log('change 返回:', e)
-				if (Object.keys(e.extraInfo).length && e.extraInfo.data.has_data==1) {
+				if (Object.keys(e.extraInfo).length && e.extraInfo.data.has_data == 1) {
 					uni.showToast({
-						title:e.extraInfo.data.data_info,
-						icon:'none',
+						title: e.extraInfo.data.data_info,
+						icon: 'none',
 						duration: 2000
-						
 					})
-					 // uni.showModal({
-					 // 	title:e.extraInfo.info,
-						// content:e.extraInfo.data.data_info,
-						// showCancel:false,
-						// confirmText:'知道啦'
-					 // })
+				} else {
+					uni.showModal({
+						title: '提示',
+						content: '',
+						editable:true,
+						placeholderText:'请输入您想说的内容',
+						success: function(res) {
+							if (res.confirm) {
+								console.log('用户点击确定');
+							} else if (res.cancel) {
+								console.log('用户点击取消');
+							}
+						}
+					});
 				}
 			},
 			confirm(e) {
@@ -285,9 +300,9 @@
 			}
 		},
 		onPullDownRefresh() {
-		    // 在用户下拉动作触发时调用
-		    this.refreshData();
-		  },
+			// 在用户下拉动作触发时调用
+			this.refreshData();
+		},
 		onUnload() {
 			// 页面销毁时释放音频资源
 			if (this.audioContext) {

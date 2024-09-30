@@ -11,7 +11,8 @@
 			<!-- <text v-if="selected&&weeks.extraInfo" class="uni-calendar-item__weeks-box-circle"></text> -->
 			<text v-if="selected&&weeks.extraInfo&&weeks.extraInfo.info=='经期'"
 				class="uni-calendar-item__weeks-box-circle"></text>
-			
+				<text v-if="selected&&weeks.extraInfo&&weeks.extraInfo.data && weeks.extraInfo.data.data_info"
+					class="uni-calendar-item__weeks-box-circle"></text>
 			<text class="uni-calendar-item__weeks-box-text" :class="{
 				'uni-calendar-item--isDay-text': weeks.isDay,
 				'uni-calendar-item--isDay':calendar.fullDate === weeks.fullDate && weeks.isDay,

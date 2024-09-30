@@ -57,6 +57,9 @@
                     "xxxhdpi" : "F:/edg download/star_192x192.png",
                     "xhdpi" : "F:/edg download/star_96x96.png"
                 }
+            },
+            "splashscreen" : {
+                "androidStyle" : "common"
             }
         }
     },
